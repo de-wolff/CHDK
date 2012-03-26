@@ -432,8 +432,9 @@ asm volatile (
 "    BNE     loc_FF0249A0 \n" 
 "    MOV     R3, #0 \n" 
 "    STR     R3, [SP] \n" 
-"    LDR     R3, =0xFF024938 \n" 
+//"    LDR     R3, =0xFF024938 \n" 
 //"    MOV     R2, #0x800 \n" 
+"    LDR     R3, =mykbd_task \n" // task_PhySw
 "    MOV     R2, #0x2000 \n" // stack size for new task_PhySw so we don't have to do stack switch
 "    MOV     R1, #0x17 \n" 
 "    LDR     R0, =0xFF024BEC \n" 

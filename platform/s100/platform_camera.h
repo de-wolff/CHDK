@@ -1,6 +1,6 @@
 // Camera - s100 - platform_camera.h
 
-// This file contains the various settings values specific to the s95 camera.
+// This file contains the various settings values specific to the s100 camera.
 // This file is referenced via the 'include/camera.h' file and should not be loaded directly.
 
 // If adding a new settings value put a suitable default in 'include/camera.h',
@@ -27,7 +27,6 @@
     #define CAM_RAW_ROWS      3124 // Found @0xff190f4c
     #undef  CAM_UNCACHED_BIT
     #define CAM_UNCACHED_BIT  0x40000000 // Found @0xff02bd84
-    #define CAM_DRYOS_2_3_R39               1
     #define CAM_PROPSET                     4
     #define CAM_DRYOS                       1
     #undef  CAM_USE_ZOOM_FOR_MF
@@ -38,6 +37,7 @@
     #define CAM_QUALITY_OVERRIDE            1
     #define CAM_AF_SCAN_DURING_VIDEO_RECORD 1
     #define CAM_HAS_JOGDIAL                 1
+    #undef  CAM_HAS_JOGDIAL // TODO:
     #undef  CAM_HAS_ERASE_BUTTON
 
     #define CAM_BRACKETING                  1
@@ -99,5 +99,4 @@
                                                 // see http://chdk.setepontos.com/index.php/topic,3994.405.html
 	#define REMOTE_SYNC_STATUS_LED 	0xc0220130	 // TODO:	// specifies an LED that turns on while camera waits for USB remote to sync
 
-											
 //----------------------------------------------------------

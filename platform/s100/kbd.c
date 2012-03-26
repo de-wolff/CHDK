@@ -39,6 +39,7 @@ int get_usb_bit()
 // Keymap values for kbd.c. Additional keys may be present, only common values included here.
 static KeyMap keymap[] = {
     { 0, KEY_DOWN            ,0x00000002 }, // Found @0xff45373c, levent 0x05
+	{ 0, KEY_DISPLAY	     ,0x00000002 },
     { 0, KEY_LEFT            ,0x00000004 }, // Found @0xff453744, levent 0x06
     { 0, KEY_MENU            ,0x00000008 }, // Found @0xff45374c, levent 0x09
     { 0, KEY_SET             ,0x00000020 }, // Found @0xff45375c, levent 0x08
@@ -47,8 +48,8 @@ static KeyMap keymap[] = {
     { 0, KEY_ZOOM_OUT        ,0x00008000 }, // Found @0xff4537ac, levent 0x03
     { 0, KEY_ZOOM_IN         ,0x00010000 }, // Found @0xff4537b4, levent 0x02
 	{ 0, KEY_VIDEO           ,0x00000100 },
+    { 0, KEY_PRINT           ,0x00000100 }, // ALT menu on short press of REC because DISP is DOWN
 
-    { 1, KEY_PRINT           ,0x00800000 }, // ALT menu
     { 1, KEY_PLAYBACK        ,0x00800000 },
     { 1, KEY_SHOOT_FULL      ,0x00300000 }, // Found @0xff4537dc, levent 0x01
     { 1, KEY_SHOOT_FULL_ONLY ,0x00200000 }, // Found @0xff4537dc, levent 0x01
@@ -71,7 +72,7 @@ long __attribute__((naked,noinline)) wrap_kbd_p1_f() {
 static void __attribute__((noinline)) mykbd_task_proceed()
 {
 	while (physw_run){
-		//_SleepTask(*((int*)0x1c18)); //10);
+		//_SleepTask(*((int*)0x1c18)); //10); // TODO: how to find this address?
         _SleepTask(10);
 
 		if (wrap_kbd_p1_f() == 1){ // autorepeat ?
@@ -116,6 +117,7 @@ void my_kbd_read_keys()
 	kbd_prev_state[2] = kbd_new_state[2];
 
 	_GetKbdState(kbd_new_state);
+	_kbd_read_keys_r2(kbd_new_state);
 
 	if (kbd_process() == 0){
 		// leave it alone...
@@ -138,8 +140,6 @@ void my_kbd_read_keys()
 		else if (jogdial_stopped && state_kbd_script_run) jogdial_control(0);
 */
 	}
-
-	_kbd_read_keys_r2(kbd_new_state);
 
 	usb_remote_key(physw_status[USB_IDX]);
 
