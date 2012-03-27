@@ -3,6 +3,7 @@
 void change_video_tables(int a, int b){
 }
 
+// TODO: check this
 void  set_quality(int *x){ // -17 highest; +12 lowest
  if (conf.video_mode) *x=12-((conf.video_quality-1)*(12+17)/(99-1));
 }
@@ -83,7 +84,7 @@ asm volatile (
 "loc_FF1CC540:\n"
 "    LDR     R1, [R4, #0xF4] \n" 
 "    BLX     R1 \n" 
-"    LDR 	 R0, =0x2F5C \n"         //added - TODO: search correct value -- sx40hs100d@FF0784A8
+"    LDR 	 R0, =0x9C3C \n"         //added, see FF1CC398
 "    BL		 set_quality \n"         //added
 "    B       loc_FF1CC598 \n" 
 "loc_FF1CC54C:\n"

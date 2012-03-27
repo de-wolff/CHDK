@@ -172,8 +172,8 @@ void __attribute__((naked,noinline)) sub_FF000364_my() {
 	*(int*)0x1938=(int)taskHook;
 	*(int*)0x193C=(int)taskHook; // need this for startup in Playback mode (otherwise init_file_modules_task doesn't hook properly)
     
-	// TODO: check C022xxxx address
-    // replacement for correct power-on. see 0xFF05867C and SX40HS
+	// TODO: check C022xxxx address and 0x26E0
+    // replacement for correct power-on. see 0xFF05867C and/or SX40HS port
 	*(int*)(0x26E0) = (*(int*)0xC022F48C)&0x800000 ? 0x200000 : 0x100000; 
 
 asm volatile (
