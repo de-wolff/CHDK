@@ -37,9 +37,9 @@
     #define CAM_QUALITY_OVERRIDE            1
     #define CAM_AF_SCAN_DURING_VIDEO_RECORD 1
     #define CAM_HAS_JOGDIAL                 1
-    #undef  CAM_HAS_JOGDIAL // TODO:
     #undef  CAM_HAS_ERASE_BUTTON
-
+    
+    #define CAM_ADJUSTABLE_ALT_BUTTON       1
     #define CAM_BRACKETING                  1
     #undef  CAM_VIDEO_CONTROL
     #define CAM_VIDEO_QUALITY_ONLY          1

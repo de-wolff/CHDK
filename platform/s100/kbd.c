@@ -15,7 +15,6 @@ static long kbd_prev_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 static long kbd_mod_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 
 static long last_kbd_key = 0;
-
 extern void _GetKbdState(long*);
 
 #define KEYS_MASK0 (0x000181EE)
@@ -48,8 +47,8 @@ static KeyMap keymap[] = {
     { 0, KEY_ZOOM_OUT        ,0x00008000 }, // Found @0xff4537ac, levent 0x03
     { 0, KEY_ZOOM_IN         ,0x00010000 }, // Found @0xff4537b4, levent 0x02
 	{ 0, KEY_VIDEO           ,0x00000100 },
-    { 0, KEY_PRINT           ,0x00000100 }, // ALT menu on short press of REC because DISP is DOWN
 
+    { 1, KEY_PRINT           ,0x00800000 }, // ALT menu on PLAYBACK button
     { 1, KEY_PLAYBACK        ,0x00800000 },
     { 1, KEY_SHOOT_FULL      ,0x00300000 }, // Found @0xff4537dc, levent 0x01
     { 1, KEY_SHOOT_FULL_ONLY ,0x00200000 }, // Found @0xff4537dc, levent 0x01
@@ -90,10 +89,8 @@ mykbd_task()
     _ExitTask();
 }
 
-/* TODO:
 // Set to 1 to disable jogdial events from being processed in firmware
 volatile int jogdial_stopped=0;
-
 // Pointer to stack location where jogdial task records previous and current
 // jogdial positions
 extern short* jog_position;
@@ -105,11 +102,11 @@ void jogdial_control(int n)
     {
         // If re-enabling jogdial set the task code current & previous positions to the actual
         // dial positions so that the change won't get processed by the firmware
-        jog_position[0] = jog_position[2] = rear_dial_position;   // Rear dial
+        jog_position[0] = jog_position[2] = rear_dial_position;   // TODO: Rear dial in stubs_min.S
     }
     jogdial_stopped = n;
 }
-*/
+
 void my_kbd_read_keys()
 {
 	kbd_prev_state[0] = kbd_new_state[0];
@@ -120,25 +117,24 @@ void my_kbd_read_keys()
 	_kbd_read_keys_r2(kbd_new_state);
 
 	if (kbd_process() == 0){
-		// leave it alone...
-          physw_status[0] = kbd_new_state[0];
-          physw_status[1] = kbd_new_state[1];
-          physw_status[2] = kbd_new_state[2];
-  //TODO:        jogdial_control(0);
+        // leave it alone...
+        physw_status[0] = kbd_new_state[0];
+        physw_status[1] = kbd_new_state[1];
+        physw_status[2] = kbd_new_state[2];
+        jogdial_control(0);
 
 	} else {
 		// override keys
 	 	physw_status[0] = (kbd_new_state[0] & (~KEYS_MASK0)) | (kbd_mod_state[0] & KEYS_MASK0);
 		physw_status[1] = (kbd_new_state[1] & (~KEYS_MASK1)) | (kbd_mod_state[1] & KEYS_MASK1);
 		physw_status[2] = (kbd_new_state[2] & (~KEYS_MASK2)) | (kbd_mod_state[2] & KEYS_MASK2);
-/* TODO:
+
 		if ((jogdial_stopped==0) && !state_kbd_script_run)
 		{
 			jogdial_control(1);
 			get_jogdial_direction();
 		}
 		else if (jogdial_stopped && state_kbd_script_run) jogdial_control(0);
-*/
 	}
 
 	usb_remote_key(physw_status[USB_IDX]);
@@ -156,6 +152,7 @@ void my_kbd_read_keys()
 
 void kbd_set_alt_mode_key_mask(long key)
 {
+    // not needed
 }
 
 void kbd_key_press(long key)
@@ -270,7 +267,7 @@ long kbd_use_zoom_as_mf() {
  return 0;
 }
 
-/* TODO:
+
 static short new_jogdial=0, old_jogdial=0;
 
 long get_jogdial_direction(void)
@@ -280,4 +277,4 @@ long get_jogdial_direction(void)
     if (old_jogdial < new_jogdial) return JOGDIAL_LEFT;
     else if (old_jogdial > new_jogdial) return JOGDIAL_RIGHT;
     else return 0;
-}*/
+}

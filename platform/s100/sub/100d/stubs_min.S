@@ -13,3 +13,5 @@ DEF(zoom_status                             ,0x0000ad6c) // Found @0xff213958
 DEF(zoom_busy                               ,0x00009b24) // Found @0xff1c6118
 DEF(focus_busy                              ,0x00009940) // Found @0xff1bef10
 DEF(recreview_hold                          ,0x00005008) // Found @0xff0a51b0
+
+DEF(rear_dial_position                      ,0xC0240106) // TODO:
