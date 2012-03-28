@@ -10,8 +10,7 @@ CAMERA TODO/KNOWN ISSUES:
 - various defines in platform_camera.h needs to be checked
 
 - 100d movie override quality seems to be working but values might be wrong (stock Canon reaches 4MB/s, CHDK quality 99 2MB/s)
-- 100d movie zoom unlock works but locks the keyboard after the first zooming
 - 100d jogdial is untested and needs correct rear_dial_position address in stubs_min.S
-- 100d needs correct some_flag_for_af_scan in stubs_entry_2.S
 - 100d address for custom power on needs to be checked in boot.c because it seems to be wrong
+- 100d address for focus_len_table needed in stubs_min.S
 

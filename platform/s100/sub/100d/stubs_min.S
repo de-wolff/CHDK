@@ -15,3 +15,6 @@ DEF(focus_busy                              ,0x00009940) // Found @0xff1bef10
 DEF(recreview_hold                          ,0x00005008) // Found @0xff0a51b0
 
 DEF(rear_dial_position                      ,0xC0240106) // TODO:
+// focus_len_table contains zoom focus lengths for use in 'get_focal_length' (main.c).
+// each entry contains 3 int value(s), the first is the zoom focus length.
+DEF(focus_len_table                         ,0xfffe2d2c) // TODO:
