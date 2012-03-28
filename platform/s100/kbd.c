@@ -18,7 +18,7 @@ static long last_kbd_key = 0;
 extern void _GetKbdState(long*);
 
 #define KEYS_MASK0 (0x000181EE)
-#define KEYS_MASK1 (0x00E00000)
+#define KEYS_MASK1 (0x00B00000)
 #define KEYS_MASK2 (0x00000000)
 
 #define SD_READONLY_FLAG    0x00000800 // Found @0xff4537fc, levent 0x20a
