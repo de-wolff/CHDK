@@ -172,9 +172,9 @@ void __attribute__((naked,noinline)) sub_FF000364_my() {
 	*(int*)0x1938=(int)taskHook;
 	*(int*)0x193C=(int)taskHook; // need this for startup in Playback mode (otherwise init_file_modules_task doesn't hook properly)
     
-	// TODO: check C022xxxx address and 0x26E0
-    // replacement for correct power-on. see 0xFF05867C and/or SX40HS port
-	*(int*)(0x26E0) = (*(int*)0xC022F48C)&0x800000 ? 0x200000 : 0x100000; 
+	// TODO: check C022xxxx address and 0x800000 because it's always starting in PLAY mode
+    // replacement for correct power-on. see sub_FF024AF4 -> 0xFF05867C and/or SX40HS port
+	*(int*)(0x26E4) = (*(int*)0xC022F48C)&1 ? 0x200000 : 0x100000; 
 
 asm volatile (
 "    LDR     R0, =0xFF0003DC \n" 
@@ -376,7 +376,7 @@ asm volatile (
 "    MOV     R2, R7 \n" 
 "    MOV     R1, R5 \n" 
 "    MOV     R0, R4 \n" 
-"    BL      sub_FF024AF4 \n" // TODO: power button & startup, see sub_FF000364_my
+//"    BL      sub_FF024AF4 \n" // power button & startup, see sub_FF000364_my
 "    BL      sub_FF024AF0 \n" 
 "    BL      sub_FF02B598 \n" 
 "    LDR     R1, =0x5CE000 \n" 

@@ -30,15 +30,12 @@
     #define CAM_PROPSET                     4
     #define CAM_DRYOS                       1
     #undef  CAM_USE_ZOOM_FOR_MF
-    #undef  CAM_EMUL_KEYPRESS_DURATION
-    #define CAM_EMUL_KEYPRESS_DURATION      10
     #undef  CAM_MENU_BORDERWIDTH
     #define CAM_MENU_BORDERWIDTH            10
     #define CAM_QUALITY_OVERRIDE            1
-    #define CAM_AF_SCAN_DURING_VIDEO_RECORD 1
     #define CAM_HAS_JOGDIAL                 1
     #undef  CAM_HAS_ERASE_BUTTON
-    
+
     #define CAM_ADJUSTABLE_ALT_BUTTON       1
     #define CAM_BRACKETING                  1
     #undef  CAM_VIDEO_CONTROL
@@ -76,12 +73,12 @@
     #define cam_CalibrationIlluminant1      17  // TODO:
 
     // TODO:
-    #define CAM_JPEG_WIDTH                  3648
-    #define CAM_JPEG_HEIGHT                 2736
-    #define CAM_ACTIVE_AREA_X1              64
-    #define CAM_ACTIVE_AREA_Y1              22
-    #define CAM_ACTIVE_AREA_X2              3728
-    #define CAM_ACTIVE_AREA_Y2              2762
+    #define CAM_JPEG_WIDTH                  4000
+    #define CAM_JPEG_HEIGHT                 3000
+    #define CAM_ACTIVE_AREA_X1              24
+    #define CAM_ACTIVE_AREA_Y1              10
+    #define CAM_ACTIVE_AREA_X2              (CAM_RAW_ROWPIX-72)
+    #define CAM_ACTIVE_AREA_Y2              (CAM_RAW_ROWS-12)
 
     #define CAM_ZEBRA_ASPECT_ADJUST         1
 
@@ -92,11 +89,17 @@
 
     // TODO: - we may need this to save memory
     //#define CAM_ZEBRA_NOBUF                 1
-    #define CAM_DATE_FOLDER_NAMING          0x400 // // TODO: Value found in the last function, which is called in GetImageFolder. (first compare)
 
+    #define CAM_DATE_FOLDER_NAMING                      1    // TODO
     #define CAM_DRIVE_MODE_FROM_TIMER_MODE  1   //  // TODO: use PROPCASE_TIMER_MODE to check for multiple shot custom timer.
                                                 // Used to enabled bracketing in custom timer, required on many recent cameras
                                                 // see http://chdk.setepontos.com/index.php/topic,3994.405.html
-	#define REMOTE_SYNC_STATUS_LED 	0xc0220130	 // TODO:	// specifies an LED that turns on while camera waits for USB remote to sync
+    #undef  CAM_USB_EVENTID
+    #define CAM_USB_EVENTID         0x202 // Levent ID for USB control. Changed in DryOS R49 so needs to be overridable.
+
+	#define REMOTE_SYNC_STATUS_LED 	0xC022C30C // specifies an LED that turns on while camera waits for USB remote to sync
+
+    #undef CAM_CAN_UNLOCK_OPTICAL_ZOOM_IN_VIDEO
+    #undef CAM_AF_SCAN_DURING_VIDEO_RECORD
 
 //----------------------------------------------------------
