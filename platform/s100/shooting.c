@@ -6,8 +6,8 @@
 // These F-numbers are the "mock" values shown by the cam.
 // They're linked to FL (zoom) and ND8 filter.
 // aperture_sizes_table[].id is just a serial number.
-const ApertureSize aperture_sizes_table[] = { //  TODO: PROPCASE 26
-    {  9, 201, "2.0" },
+const ApertureSize aperture_sizes_table[] = {
+    {  9, 200, "2.0" },
     { 10, 224, "2.2" },
     { 11, 256, "2.5" },
     { 12, 288, "2.8" },
@@ -19,11 +19,11 @@ const ApertureSize aperture_sizes_table[] = { //  TODO: PROPCASE 26
     { 18, 480, "5.6" },
     { 19, 512, "6.3" },
     { 20, 544, "7.1" },
-	{ 21, 576, "8.0" },
+    { 21, 576, "8.0" },
 };
 
 // id, prop_id, name, usec;
-const ShutterSpeed shutter_speeds_table[] = { // TODO:
+const ShutterSpeed shutter_speeds_table[] = {
     { -12, -384, "15", 15000000 },
     { -11, -352, "13", 13000000 },
     { -10, -320, "10", 10000000 },
@@ -68,70 +68,73 @@ const ShutterSpeed shutter_speeds_table[] = { // TODO:
     {  29,  928, "1/800",  1250 },
     {  30,  960, "1/1000", 1000 },
     {  31,  992, "1/1250",  800 },
-    {  32, 1024, "1/1600",  625 }
+    {  32, 1024, "1/1600",  625 },
+    {  33, 1056, "1/2000",  500 }
 };
 
-const ISOTable iso_table[] = { // TODO:
+const ISOTable iso_table[] = {
     {  0,     0,  "Auto", -1},
     {  1,    80,    "80", -1},
     {  2,   100,   "100", -1},
-	{  3,   125,   "125", -1},
-	{  4,   160,   "160", -1},
+    {  3,   125,   "125", -1},
+    {  4,   160,   "160", -1},
     {  5,   200,   "200", -1},
-	{  6,   250,   "250", -1},
-	{  7,   320,   "320", -1},
+    {  6,   250,   "250", -1},
+    {  7,   320,   "320", -1},
     {  8,   400,   "400", -1},
-	{  9,   500,   "500", -1},
-	{ 10,   640,   "650", -1},
+    {  9,   500,   "500", -1},
+    { 10,   640,   "650", -1},
     { 11,   800,   "800", -1},
-	{ 12,  1000,  "1000", -1},
-	{ 13,  1250,  "1250", -1},
+    { 12,  1000,  "1000", -1},
+    { 13,  1250,  "1250", -1},
     { 14,  1600,  "1600", -1},
-	{ 15,  2000,  "2000", -1},
-	{ 16,  2500,  "2500", -1},
-    { 17,  3200,  "3200", -1}
+    { 15,  2000,  "2000", -1},
+    { 16,  2500,  "2500", -1},
+    { 17,  3200,  "3200", -1},
+    { 18,  4000,  "4000", -1},
+    { 19,  5000,  "5000", -1},
+    { 20,  6400,  "6400", -1},
 };
 
-const CapturemodeMap modemap[] = { // TODO:
-	{ MODE_P,                  32772  },
-	{ MODE_TV,                 32771  },
-	{ MODE_AV,                 32770  },
-	{ MODE_M,                  32769  },
-	{ MODE_AUTO,               32768  },
-    { MODE_LOWLIGHT,	       32801  },
-
-	{ MODE_VIDEO_COLOR_ACCENT, 2612   },
-	{ MODE_VIDEO_COLOR_SWAP,   2613   },
-    { MODE_VIDEO_MINIATURE,    2620   },
-	{ MODE_VIDEO_STD,          2614   },
-
-	{ MODE_SCN_PORTRAIT,       16399  },
-	{ MODE_SCN_LANDSCAPE,	   16398  },
-	{ MODE_SCN_KIDS_PETS,      16402  },
-    { MODE_SCN_FACE_SELF_TIMER,16936  },
-	{ MODE_SCN_SMART_SHUTTER,  16937  },
-    { MODE_SCN_WINK_SELF_TIMER,16938  },
-	{ MODE_SCN_SUPER_VIVID,    16934  },
-	{ MODE_SCN_POSTER_EFFECT,  16935  },
-	{ MODE_SCN_COLOR_ACCENT,   16925  },
-	{ MODE_SCN_COLOR_SWAP,     16926  },
-	{ MODE_SCN_HDR,            16942  },
-	{ MODE_SCN_NOSTALGIC,      16933  },
-	{ MODE_SCN_FISHEYE,        16939  },
-	{ MODE_SCN_MINIATURE,      16940  },
-	{ MODE_SCN_BEACH,          16407  },
-	{ MODE_SCN_UNDERWATER,     16409  },
-	{ MODE_SCN_FOLIAGE,        16405  },
-	{ MODE_SCN_SNOW,           16406  },
-	{ MODE_SCN_FIREWORK,       16408  },
-    { MODE_SCN_STITCH,         16908  },
+const CapturemodeMap modemap[] = {
+    { MODE_P,                   32772 },
+    { MODE_TV,                  32771 },
+    { MODE_AV,                  32770 },
+    { MODE_M,                   32769 },
+    { MODE_AUTO,                32768 },
+    // SCN modes
+    { MODE_VIDEO_MOVIE_DIGEST,  16950 },
+    { MODE_SCN_PORTRAIT,        16400 },
+    { MODE_SCN_LANDSCAPE,       16399 },
+    { MODE_SCN_KIDS_PETS,       16403 },
+    { MODE_SCN_SMART_SHUTTER,   16938 },
+    { MODE_SCN_HIGHSPEED_BURST, 16905 },
+    { MODE_SCN_NIGHT_SCENE,     16942 },
+    { MODE_SCN_BEACH,           16408 },
+    { MODE_SCN_UNDERWATER,      16410 },
+    { MODE_SCN_FOLIAGE,         16406 },
+    { MODE_SCN_SNOW,            16407 },
+    { MODE_SCN_FIREWORK,        16409 },
+    { MODE_SCN_STITCH,          16909 },
+    // Other SCN modes
+    { MODE_SCN_HDR,              8751 },
+    { MODE_SCN_NOSTALGIC,        8742 },
+    { MODE_SCN_FISHEYE,          8748 },
+    { MODE_SCN_MINIATURE,        8749 },
+    { MODE_SCN_TOY_CAMERA,       8752 },
+    { MODE_SCN_MONOCHROME,       8755 },
+    { MODE_SCN_SUPER_VIVID,      8743 },
+    { MODE_SCN_POSTER_EFFECT,    8744 },
+    { MODE_SCN_COLOR_ACCENT,     8734 },
+    { MODE_SCN_COLOR_SWAP,       8735 },
+    // VIDEO modes
+    { MODE_VIDEO_STD,            2622 },
+    { MODE_VIDEO_IFRAME_MOVIE,   2629 },
+    { MODE_VIDEO_SUPER_SLOW,     2627 },
 };
 
 
 #include "../generic/shooting.c"
- // TODO:
-const int dof_tbl[] = {6000, 6850, 7490, 8560, 9640, 10700, 12850, 14980, 18190, 22500};
-const int dof_tbl_size = sizeof(dof_tbl)/sizeof(dof_tbl[0]);
 
 long get_file_next_counter() {
     return get_file_counter();
@@ -146,11 +149,10 @@ long get_target_file_num() {
 }
 
 #if defined(CAM_DATE_FOLDER_NAMING)
-void get_target_dir_name(char *out) {
+void get_target_dir_name(char *out)
+{
     extern void _GetImageFolder(char*,int,int,int);
-    out[0] = 'A';
-    _GetImageFolder(out+1,get_file_next_counter(),CAM_DATE_FOLDER_NAMING,time(NULL));
-    out[15] = '\0';
+    _GetImageFolder(out,get_file_next_counter(),0x400,time(NULL));
 }
 #else
 long get_target_dir_num() {
@@ -162,5 +164,8 @@ long get_target_dir_num() {
 }
 #endif
 
-int circle_of_confusion = 7;
-
+/* TODO: is this used anywhere?
+const int dof_tbl[] = {6000, 6850, 7490, 8560, 9640, 10700, 12850, 14980, 18190, 22500};
+const int dof_tbl_size = sizeof(dof_tbl)/sizeof(dof_tbl[0]);
+*/
+int circle_of_confusion = 5; //TODO:
