@@ -25,19 +25,18 @@ void startup()
     boot();
 }
 
-//TODO: THIS IS S95
-// Focus length table in firmware @0xfffe2d2c
-#define NUM_FL      10  // 0 - 9, entries in firmware
-#define NUM_DATA    3   // 3 words each entry, first is FL
+// Focus length table in firmware @0xfff4a4f8
+#define NUM_FL      121 // 0 - 120, entries in firmware
+#define NUM_DATA    2   // 2 words each entry
 extern int focus_len_table[NUM_FL*NUM_DATA];
-//TODO: THIS IS S95
+
 // Conversion factor lens FL --> 35mm equiv
 // lens      35mm     CF
 // ----      ----     --
-// 6.0       28       ( 28/ 6.0) * 60 = 280  (min FL)
-// 22.5      105      (105/22.5) * 60 = 280  (max FL)
-#define CF_EFL      280
-#define	CF_EFL_DIV  60
+// 5.2       24       ( 24/ 5.2) * 52 = 240  (min FL)
+// 26.0      120      (120/26.0) * 52 = 240  (max FL)
+#define CF_EFL      240
+#define	CF_EFL_DIV  52
 
 const int zoom_points = NUM_FL;
 
@@ -55,13 +54,12 @@ int get_zoom_x(int zp) {
     return get_focal_length(zp)*10/focus_len_table[0];
 }
 
-// TODO:
-long get_vbatt_min()
+long get_vbatt_min() // TODO:
 {
     return 3000;
 }
 
-long get_vbatt_max()
+long get_vbatt_max() // TODO:
 {
     return 4100;
 }

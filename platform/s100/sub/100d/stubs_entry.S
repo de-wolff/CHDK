@@ -14,60 +14,31 @@
 
 // Stubs below should be checked. Stub not matched 100%, or difference found to current 'stubs_entry_2.S'
 //    Name                                     Address      Rule  %  Comp to stubs_entry_2.S
-// ERROR: kbd_pwr_off is not found.                        //--- ---
-// ERROR: kbd_pwr_on is not found.                         //--- ---
+// ERROR: kbd_pwr_off is not found.                        //--- ---    *** != 0x00000000
+// ERROR: kbd_pwr_on is not found.                         //--- ---    *** != 0x00000000
 
 // Check of modemap from 'platform/CAMERA/shooting.c':
 // Firmware modemap table found @ff09cf84 -> ff099208 -> ff205770 -> ff3877bc -> ff626540
-// Mode 32769 in firmware but not in current modemap (MODE_M)
-// Mode 32771 in firmware but not in current modemap (MODE_TV)
-// Mode 32770 in firmware but not in current modemap (MODE_AV)
-// Mode 32772 in firmware but not in current modemap (MODE_P)
-// Mode 16950 in firmware but not in current modemap
-// Mode 16909 in firmware but not in current modemap
-// Mode  8749 in firmware but not in current modemap
-// Mode  8748 in firmware but not in current modemap
-// Mode  8752 in firmware but not in current modemap
-// Mode 32802 in firmware but not in current modemap
-// Mode  8734 in firmware but not in current modemap
-// Mode  8735 in firmware but not in current modemap
-// Mode  8755 in firmware but not in current modemap
-// Mode 16406 in firmware but not in current modemap
-// Mode 16400 in firmware but not in current modemap
-// Mode 16399 in firmware but not in current modemap
-// Mode 16905 in firmware but not in current modemap
-// Mode  8743 in firmware but not in current modemap
-// Mode  8744 in firmware but not in current modemap
-// Mode 16403 in firmware but not in current modemap
-// Mode 16407 in firmware but not in current modemap
-// Mode 16408 in firmware but not in current modemap
-// Mode 16410 in firmware but not in current modemap
-// Mode  8742 in firmware but not in current modemap
-// Mode  8751 in firmware but not in current modemap
-// Mode 16942 in firmware but not in current modemap
-// Mode 32768 in firmware but not in current modemap (MODE_AUTO)
-// Mode 16409 in firmware but not in current modemap
-// Mode 16937 in firmware but not in current modemap
-// Mode 16938 in firmware but not in current modemap
-// Mode 16939 in firmware but not in current modemap
-// Mode  2622 in firmware but not in current modemap
-// Mode  2627 in firmware but not in current modemap
-// Mode  2629 in firmware but not in current modemap
+// No problems found with modemap table.
 
 // Values below can be overridden in 'stubs_min.S':
-DEF(physw_status                            ,0x000386bc) // Found @0xff024db0
-DEF(physw_run                               ,0x00001c3c) // Found @0xff02493c
-DEF(levent_table                            ,0xff5905bc) // Found @0xff5905bc
-DEF(FlashParamsTable                        ,0xff6267a4) // Found @0xff6267a4
-DEF(movie_status                            ,0x00009bfc) // Found @0xff1cb1b0
-DEF(full_screen_refresh                     ,0x0000ca28) // Found @0xff297af0
-DEF(canon_menu_active                       ,0x00004484) // Found @0xff0924cc
-DEF(canon_shoot_menu_active                 ,0x0000b291) // Found @0xff22ca24
-DEF(playrec_mode                            ,0x000041a4) // Found @0xff083ca8
-DEF(zoom_status                             ,0x0000ad6c) // Found @0xff213958
-DEF(zoom_busy                               ,0x00009b24) // Found @0xff1c6118
-DEF(focus_busy                              ,0x00009940) // Found @0xff1bef10
-DEF(recreview_hold                          ,0x00005008) // Found @0xff0a51b0
+//DEF(physw_status                            ,0x000386bc) // Found @0xff024db0,          stubs_min = 0x000386bc (0x000386bc)
+//DEF(physw_run                               ,0x00001c3c) // Found @0xff02493c,          stubs_min = 0x00001c3c (0x00001c3c)
+//DEF(levent_table                            ,0xff5905bc) // Found @0xff5905bc,          stubs_min = 0xff5905bc (0xff5905bc)
+//DEF(FlashParamsTable                        ,0xff6267a4) // Found @0xff6267a4,          stubs_min = 0xff6267a4 (0xff6267a4)
+//DEF(movie_status                            ,0x00009bfc) // Found @0xff1cb1b0,          stubs_min = 0x00009bfc (0x00009bfc)
+//DEF(full_screen_refresh                     ,0x0000ca28) // Found @0xff297af0,          stubs_min = 0x0000ca28 (0x0000ca28)
+//DEF(canon_menu_active                       ,0x00004484) // Found @0xff0924cc,          stubs_min = 0x00004484 (0x00004484)
+//DEF(canon_shoot_menu_active                 ,0x0000b291) // Found @0xff22ca24,          stubs_min = 0x0000b291 (0x0000b291)
+//DEF(playrec_mode                            ,0x000041a4) // Found @0xff083ca8,          stubs_min = 0x000041a4 (0x000041a4)
+//DEF(zoom_status                             ,0x0000ad6c) // Found @0xff213958,          stubs_min = 0x0000ad6c (0x0000ad6c)
+// focus_len_table contains zoom focus lengths for use in 'get_focal_length' (main.c).
+// each entry contains 2 int value(s), the first is the zoom focus length.
+// there are 121 entries in the table - set NUM_FL to 121
+//DEF(focus_len_table                         ,0xfff4a4f8) // Found @0xfff4a4f8,          stubs_min = 0xfff4a4f8 (0xfff4a4f8)
+//DEF(zoom_busy                               ,0x00009b24) // Found @0xff1c6118,          stubs_min = 0x00009b24 (0x00009b24)
+//DEF(focus_busy                              ,0x00009940) // Found @0xff1bef10,          stubs_min = 0x00009940 (0x00009940)
+//DEF(recreview_hold                          ,0x00005008) // Found @0xff0a51b0,          stubs_min = 0x00005008 (0x00005008)
 
 // Values below go in 'lib.c':
 //void *vid_get_bitmap_fb()        { return (void*)0x40685000; }             // Found @0xff051fbc

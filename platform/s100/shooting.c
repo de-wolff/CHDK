@@ -102,12 +102,15 @@ const CapturemodeMap modemap[] = {
     { MODE_AV,                  32770 },
     { MODE_M,                   32769 },
     { MODE_AUTO,                32768 },
+    { MODE_LOWLIGHT,            32802 },
     // SCN modes
     { MODE_VIDEO_MOVIE_DIGEST,  16950 },
     { MODE_SCN_PORTRAIT,        16400 },
     { MODE_SCN_LANDSCAPE,       16399 },
     { MODE_SCN_KIDS_PETS,       16403 },
     { MODE_SCN_SMART_SHUTTER,   16938 },
+    { MODE_SCN_WINK_SELF_TIMER, 16939 },
+    { MODE_SCN_FACE_SELF_TIMER, 16937 },
     { MODE_SCN_HIGHSPEED_BURST, 16905 },
     { MODE_SCN_NIGHT_SCENE,     16942 },
     { MODE_SCN_BEACH,           16408 },
@@ -116,7 +119,7 @@ const CapturemodeMap modemap[] = {
     { MODE_SCN_SNOW,            16407 },
     { MODE_SCN_FIREWORK,        16409 },
     { MODE_SCN_STITCH,          16909 },
-    // Other SCN modes
+    // Other SCN modes - Creative Filters
     { MODE_SCN_HDR,              8751 },
     { MODE_SCN_NOSTALGIC,        8742 },
     { MODE_SCN_FISHEYE,          8748 },
@@ -164,8 +167,4 @@ long get_target_dir_num() {
 }
 #endif
 
-/* TODO: is this used anywhere?
-const int dof_tbl[] = {6000, 6850, 7490, 8560, 9640, 10700, 12850, 14980, 18190, 22500};
-const int dof_tbl_size = sizeof(dof_tbl)/sizeof(dof_tbl[0]);
-*/
 int circle_of_confusion = 5; //TODO:

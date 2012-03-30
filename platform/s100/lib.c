@@ -16,7 +16,7 @@ void vid_bitmap_refresh()
 
 void shutdown()
 {
-	volatile long *p = (void*)0xC022001C; //TODO: WRONG (?)
+	volatile long *p = (void*)0xC022001C; //TODO: didn't check this
 
 	asm(
 		"MRS     R1, CPSR\n"
@@ -54,7 +54,6 @@ void shutdown_soft()
    _PostLogicalEventForNotPowerType(0x1005,0);
 }
 
- // TODO:
 int vid_get_viewport_width()
 {
 	return 360;
@@ -63,10 +62,9 @@ int vid_get_viewport_width()
 long vid_get_viewport_height()
 {
    return 240;
-
 }
 
 // Y multiplier for cameras with 480 pixel high viewports (CHDK code assumes 240)
 int vid_get_viewport_yscale() {
-	return 2;               // S95 viewport is 480 pixels high
+	return 2;
 }
