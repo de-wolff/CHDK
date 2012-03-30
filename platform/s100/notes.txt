@@ -11,7 +11,7 @@ CAMERA TODO/KNOWN ISSUES:
 - various defines in platform_camera.h needs to be checked
 - value for SleepTask in kbd.c instead of hardcoded 10 (minor issue)
 
-- 100d movie override quality seems to be working but values might be wrong (stock Canon reaches 4MB/s, CHDK quality 99 2MB/s)
-- 100d jogdial is untested and needs correct rear_dial_position address in stubs_min.S
-- 100d address and values for custom power-on needs to be checked in boot.c
-
+- 100d, 101a: movie override quality seems to be working but values might be wrong (stock Canon reaches 4MB/s, CHDK quality 99 2MB/s)
+- 100d, 101a: jogdial is untested and needs correct rear_dial_position address in stubs_min.S
+- 100d, 101a: address and values for custom power-on needs to be checked in boot.c
+- 100d, 101a: lib.c needs some values
