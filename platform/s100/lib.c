@@ -54,6 +54,14 @@ void shutdown_soft()
    _PostLogicalEventForNotPowerType(0x1005,0);
 }
 
+void JogDial_CW(void){ //TODO: find correct value
+	_PostLogicalEventForNotPowerType(0x874, 1);  // RotateJogDialRight
+}
+
+void JogDial_CCW(void){ //TODO: find correct value
+	_PostLogicalEventForNotPowerType(0x875, 1);  // RotateJogDialLeft
+}
+
 int vid_get_viewport_width()
 {
 	return 360;
@@ -68,3 +76,9 @@ long vid_get_viewport_height()
 int vid_get_viewport_yscale() {
 	return 2;
 }
+
+void *vid_get_viewport_live_fb()
+{
+    return vid_get_viewport_fb();
+}
+

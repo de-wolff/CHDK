@@ -63,22 +63,22 @@
     #define EDGE_HMARGIN                    28
 
     #define CAM_DNG_LENS_INFO               { 52,10, 260,10, 20,10, 59,10 }
-    // TODO:
-    #define cam_CFAPattern                  0x02010100 // Red  Green  Green  Blue
-    // TODO:
+
+    #define cam_CFAPattern                  0x01000201 // = [Green Blue Red Green]
+    // TODO: find correct values
     #define CAM_COLORMATRIX1                  \
       14134, 1000000, -5576, 1000000, -1527, 1000000, \
       -1991, 1000000, 10719, 1000000,  1273, 1000000, \
       -1158, 1000000,  1929, 1000000,  3581, 1000000
     #define cam_CalibrationIlluminant1      17  // TODO:
 
-    // TODO:
+    // TODO: check these values
     #define CAM_JPEG_WIDTH                  4000
     #define CAM_JPEG_HEIGHT                 3000
-    #define CAM_ACTIVE_AREA_X1              24
-    #define CAM_ACTIVE_AREA_Y1              10
-    #define CAM_ACTIVE_AREA_X2              (CAM_RAW_ROWPIX-72)
-    #define CAM_ACTIVE_AREA_Y2              (CAM_RAW_ROWS-12)
+    #define CAM_ACTIVE_AREA_X1              104
+    #define CAM_ACTIVE_AREA_Y1              12
+    #define CAM_ACTIVE_AREA_X2              (CAM_RAW_ROWPIX-8)
+    #define CAM_ACTIVE_AREA_Y2              (CAM_RAW_ROWS-64)
 
     #define CAM_ZEBRA_ASPECT_ADJUST         1
 
