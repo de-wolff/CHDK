@@ -43,23 +43,8 @@ void camera_set_led(int led, int state, int bright)
   _LEDDrive(led_table[(led-4)%sizeof(led_table)], state<=1 ? !state : state);
 }
 
-int vid_get_viewport_width()
-{
-	return 360;
-}
-
 long vid_get_viewport_height()
 {
    return 240;
-}
-
-// Y multiplier for cameras with 480 pixel high viewports (CHDK code assumes 240)
-int vid_get_viewport_yscale() {
-	return 2;
-}
-
-void *vid_get_viewport_live_fb()
-{
-    return vid_get_viewport_fb();
 }
 
