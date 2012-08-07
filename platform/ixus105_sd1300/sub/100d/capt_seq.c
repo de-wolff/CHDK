@@ -94,7 +94,9 @@ void __attribute__((naked,noinline)) capt_seq_task() { // ffc5fa40
 "loc_ffc5faf4:\n"
                  "B       loc_ffc5fd00\n"
 "loc_ffc5faf8:\n"
+                 "BL      shooting_expo_iso_override\n"  		    // added
                  "BL      sub_ffc6033c\n"
+                 "BL      shooting_expo_param_override\n"  		// added
                  "BL      sub_ffc5db3c\n"
                  "LDR     R0, [R4,#0x24]\n"
                  "CMP     R0, #0\n"
@@ -976,8 +978,8 @@ void __attribute__((naked,noinline)) sub_FFC88B9C_my(){ //
                  "STRH    R4, [R5,#2]\n"
                  "BLEQ    sub_FFC0EB14\n"
                  "MOV     R0, R4\n"
-                 "BL      sub_FFD8F4B8\n"
-            //   "BL      apex2us\n"  // +
+            //     "BL      sub_FFD8F4B8\n" // -
+                 "BL      apex2us\n"  // +
                  "MOV     R4, R0\n"
                  // "BL      nullsub_65\n"
                  "MOV     R0, R4\n"

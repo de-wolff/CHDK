@@ -3,7 +3,7 @@
 
 void vid_bitmap_refresh()
 {
-/*    
+/*  NOTE: This was the old method, i think the new one performs better
     extern int enabled_refresh_physical_screen;
     enabled_refresh_physical_screen=1;
     _RefreshPhysicalScreen(1);
