@@ -3,9 +3,18 @@
 
 void vid_bitmap_refresh()
 {
+/*    
     extern int enabled_refresh_physical_screen;
     enabled_refresh_physical_screen=1;
     _RefreshPhysicalScreen(1);
+*/
+	extern int full_screen_refresh;
+	extern void _ScreenUnlock();
+	extern void _ScreenLock();
+
+	full_screen_refresh |= 3;
+	_ScreenLock();
+	_ScreenUnlock();
 }
 
 void shutdown()

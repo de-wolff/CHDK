@@ -95,14 +95,7 @@ void __attribute__((naked,noinline)) capt_seq_task() { // ffc5fa40
                  "B       loc_ffc5fd00\n"
 "loc_ffc5faf8:\n"
                  "BL      sub_ffc6033c\n"
-                 "BL      tv_override\n" // added
                  "BL      sub_ffc5db3c\n"
-// copied over from SX10/SX200
-// added to avoid some incorrect behavior if overrides are used.
-// it can cause some unexpected side effects. In this case, remove this code!
-                 "MOV     R0, #0\n"
-                 "STR     R0, [R4,#0x24]\n"  // fixes overrides  behavior at short shutter press
-// end of added code
                  "LDR     R0, [R4,#0x24]\n"
                  "CMP     R0, #0\n"
                  "BEQ     loc_ffc5fd00\n"

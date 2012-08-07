@@ -1,8 +1,6 @@
 *** General info:
 Digic IV, dryos r43
 
-Untested alpha port of alpha SDM code from http://chdk.setepontos.com/index.php?topic=5720.690
-
 tested (not clear which build or by who):
 - loading, drawing
 - some lua stuff

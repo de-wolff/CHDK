@@ -66,3 +66,8 @@
 
     #undef  CAM_USES_ASPECT_CORRECTION
     #define CAM_USES_ASPECT_CORRECTION      1
+
+    #define CAM_ADJUSTABLE_ALT_BUTTON      1
+
+    #define  CAM_ZEBRA_ASPECT_ADJUST      1
+
