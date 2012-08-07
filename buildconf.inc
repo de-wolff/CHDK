@@ -45,7 +45,7 @@ OPT_PTP=1
 # If enabled (and reference binaries are present in /tools), compiler will generate function signatures
 OPT_GEN_SIGS=1
 # If enabled (and firmware binaries are present) compiler will update "stubs_entry.S"
-#OPT_GEN_STUBS=1
+OPT_GEN_STUBS=1
 # the symbols / not done yet
 #!OPT_SYMBOLS=1
 # for people who won't use lang files at all / not done yet
