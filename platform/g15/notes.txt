@@ -1,0 +1,12 @@
+****************************************
+Camera depending notes: 
+* DryOS Camera
+---
+Alpha CHDK for G15.
+
+****************************************
+Development notes:
+---
+Known issues:
+    - Currently only firmware 1.00b is supported.
+
