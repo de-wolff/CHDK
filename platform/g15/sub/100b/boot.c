@@ -136,7 +136,7 @@ void __attribute__((naked,noinline)) boot() {
       "    LDRCC   R2, [R0], #4 \n" 
       "    STRCC   R2, [R1], #4 \n" 
       "    BCC     loc_FF000160 \n" 
-      "    LDR     R1, =0x18B824 \n" 
+      "    LDR     R1, =0x18B824 \n" //MEMISOSTART
       "    MOV     R2, #0 \n" 
 "loc_FF000178:\n"
       "    CMP     R3, R1 \n" 
@@ -250,12 +250,12 @@ void __attribute__((naked,noinline)) TaskHookFnc1() {
       "    LDR     R3, [SP, #0x10] \n" 
       "    STR     R3, [SP] \n" 
       "    MOV     R3, R12 \n" 
-      "    BL      sub_68AB8C \n" // FF74B74C−ff745bc0+685000
+      "   BL       _CreateTask \n" // FF74B74C−ff745bc0+685000
       "    CMP     R0, #5 \n" 
       "    MOV     R4, R0 \n" 
       "    MOVEQ   R1, #0x13 \n" 
       "    LDREQ   R0, =0x68B0F4 \n" // FF74BCB4−ff745bc0+685000
-      "    BLEQ    sub_68B104 \n" // FF74BCC4−ff745bc0+685000
+      "   BLEQ     _DebugAssert \n" // FF74BCC4−ff745bc0+685000
       "    MOV     R0, R4 \n" 
       "    LDMFD   SP!, {R3-R5,PC} \n" 
 	);
@@ -290,7 +290,7 @@ void __attribute__((naked,noinline)) TaskHookFnc2() {
       "    MOV     R7, R3 \n" 
       "    MOVGT   R1, #0xA3 \n" 
       "    LDRGT   R0, =0x68ADB8 \n" // FF74B978−ff745bc0+685000
-      "    BLGT    sub_68B104 \n"  // FF74BCC4−ff745bc0+685000
+      "   BLGT     _DebugAssert \n"  // FF74BCC4−ff745bc0+685000
       "    LDR     R0, =0x1B08 \n" 
       "    CMP     R4, #0 \n" 
       "    LDREQ   R4, [R0] \n" 
@@ -317,7 +317,7 @@ void __attribute__((naked,noinline)) TaskHookFnc2() {
       "    BNE     loc_68AC2C \n" // FF74B7EC−ff745bc0+685000
       "    MOV     R1, #0xB9 \n" 
       "    LDR     R0, =0x68ADB8 \n" // FF74B978−ff745bc0+685000
-      "    BL      sub_68B104 \n" // FF74BCC4−ff745bc0+685000
+      "   BL       _DebugAssert \n" // FF74BCC4−ff745bc0+685000
       "    MOV     R0, #5 \n" 
       "    LDMFD   SP!, {R1-R9,PC} \n" 
 "loc_68AC2C:\n"
@@ -422,7 +422,6 @@ void __attribute__((naked,noinline)) sub_FF00116C_my() {
       "    BL      sub_6867E8 \n" 
       "    ADD     SP, SP, #0x74 \n" 
       "    LDR     PC, [SP], #4 \n" 
-
      );
 }
 
@@ -434,29 +433,29 @@ void __attribute__((naked,noinline)) sub_FF00421C_my() {
       "    BL      sub_FF005358 \n" 
       "    CMP     R0, #0 \n" 
       "    LDRLT   R0, =0xFF004330 \n" 
-      "    BLLT    sub_FF004310 \n" 
+      "   BLLT     _err_init_task \n"
       "    BL      sub_FF003E54 \n" 
       "    CMP     R0, #0 \n" 
       "    LDRLT   R0, =0xFF004338 \n" 
-      "    BLLT    sub_FF004310 \n" 
+      "   BLLT     _err_init_task \n"
       "    LDR     R0, =0xFF004348 \n" 
       "    BL      sub_FF003F3C \n" 
       "    CMP     R0, #0 \n" 
       "    LDRLT   R0, =0xFF004350 \n" 
-      "    BLLT    sub_FF004310 \n" 
+      "   BLLT     _err_init_task \n"
       "    LDR     R0, =0xFF004348 \n" 
       "    BL      sub_FF00295C \n" 
       "    CMP     R0, #0 \n" 
       "    LDRLT   R0, =0xFF004364 \n" 
-      "    BLLT    sub_FF004310 \n" 
+      "   BLLT     _err_init_task \n"
       "    BL      sub_FF004CF4 \n" 
       "    CMP     R0, #0 \n" 
       "    LDRLT   R0, =0xFF004370 \n" 
-      "    BLLT    sub_FF004310 \n" 
+      "   BLLT     _err_init_task \n"
       "    BL      sub_FF00165C \n" 
       "    CMP     R0, #0 \n" 
       "    LDRLT   R0, =0xFF00437C \n" 
-      "    BLLT    sub_FF004310 \n" 
+      "   BLLT     _err_init_task \n"
       "    LDMFD   SP!, {R4,LR} \n" 
       "    B	sub_FF00AE5C_my \n"		// patched
         );
@@ -498,7 +497,7 @@ void __attribute__((naked,noinline)) sub_FF00AE5C_my() {
       "    MOV     R2, #0 \n" 
       "    MOV     R1, #0x19 \n" 
       "    LDR     R0, =0xFF00AEE4 \n" 
-      "    BL      sub_68AB8C \n" 
+      "   BL       _CreateTask \n"
       "    MOV     R0, #0 \n" 
       "    LDMFD   SP!, {R3,PC} \n" 
         );
@@ -629,14 +628,14 @@ void __attribute__((naked,noinline)) init_file_modules_task() {
       "    MOVS    R4, R0 \n" 
       "    MOVNE   R1, #0 \n" 
       "    MOVNE   R0, R5 \n" 
-      "    BLNE    sub_FF09B2D8 \n" 
+      "   BLNE     _PostLogicalEventToUI \n"
       "    BL      sub_FF099F60 \n" 
 "BL      core_spytask_can_start\n"      // CHDK: Set "it's-safe-to-start" flag for spytask
       "    LDMNEFD SP!, {R4-R6,PC} \n" 
       "    MOV     R0, R5 \n" 
       "    LDMFD   SP!, {R4-R6,LR} \n" 
       "    MOV     R1, #0 \n" 
-      "    B       sub_FF09B2D8 \n"
+      "   B        _PostLogicalEventToUI \n"
  );
 }
 
@@ -685,7 +684,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    CMP     R0, #0 \n" 
       "    LDRNE   R1, =0x20B \n" 
       "    LDRNE   R0, =0xFF05EE64 \n" 
-      "    BLNE    sub_0068B104 \n" 
+      "   BLNE     _DebugAssert \n"
       "    LDR     R0, [SP] \n" 
       "    AND     R4, R0, #0xFF \n" 
       "    AND     R0, R0, #0xFF00 \n" 
@@ -700,7 +699,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    CMP     R4, #0 \n" 
       "    LDRNE   R1, =0x285 \n" 
       "    LDRNE   R0, =0xFF05EE64 \n" 
-      "    BLNE    sub_0068B104 \n" 
+      "   BLNE     _DebugAssert \n"
       "    RSB     R0, R4, R4, LSL #3 \n" 
       "    LDR     R0, [R6, R0, LSL #2] \n" 
 
@@ -830,7 +829,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    LDR     R1, =0x267 \n" 
 "loc_FF05EE04:\n"
       "    LDR     R0, =0xFF05EE64 \n" 
-      "    BL      sub_0068B104 \n" 
+      "   BL       _DebugAssert \n"
 
 "loc_FF05EE0C:\n"
       "    ADD     R0, R6, R5, LSL #2 \n" 
@@ -852,7 +851,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    LDR     R1, =0x26E \n" 
 "loc_FF05EE50:\n"
       "    LDR     R0, =0xFF05EE64 \n" 
-      "    BL      sub_0068B104 \n" 
+      "   BL       _DebugAssert \n"
       "    B       loc_FF05EC04 \n" 
 );
 }

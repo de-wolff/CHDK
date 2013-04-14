@@ -1,6 +1,3 @@
-//static void __attribute__((noreturn)) shutdown();
-//static void __attribute__((noreturn)) panic(int cnt);
-
 extern long *blob_chdk_core;
 extern long blob_chdk_core_size;
 
@@ -34,7 +31,7 @@ void __attribute__((noreturn)) my_restart()
 	// G15 100b @FF022080
     asm volatile (
         "LDR     R1, =0xC0200000\n"
-        "MOVL    R0, 0xFFFFFFFF\n"
+        // "MOVL    R0, 0xFFFFFFFF\n"
         "STR     R0, [R1,#0x10C]\n"
         "STR     R0, [R1,#0xC]\n"
         "STR     R0, [R1,#0x1C]\n"
@@ -47,12 +44,12 @@ void __attribute__((noreturn)) my_restart()
         "STR     R0, [R1,#0x8C]\n"
         "STR     R0, [R1,#0x9C]\n"
         "STR     R0, [R1,#0xAC]\n"
-        "STR     R0, [R1,#0xBC]\n"\n"
+        "STR     R0, [R1,#0xBC]\n"
         "STR     R0, [R1,#0xCC]\n"
         "STR     R0, [R1,#0xDC]\n"
         "STR     R0, [R1,#0xEC]\n"
         "CMP     R4, #7\n"
-        "STR     R0, [R1,#0xFC]
+        "STR     R0, [R1,#0xFC]\n"
         //"LDMEQFD SP!, {R4,PC}\n"
         "MOV     R0, #0x78\n"
         "MCR     p15, 0, R0,c1,c0\n"
@@ -76,42 +73,3 @@ void __attribute__((noreturn)) my_restart()
 
     while(1);
 }
-
-//#define LED_PR 0xC022C30C //TODO: check LED address and ON/OFF mechanism
-//
-//static void __attribute__((noreturn)) shutdown()
-//{
-//    volatile long *p = (void*)LED_PR;       // turned off later, so assumed to be power
-//        
-//    asm(
-//         "MRS     R1, CPSR\n"
-//         "AND     R0, R1, #0x80\n"
-//         "ORR     R1, R1, #0x80\n"
-//         "MSR     CPSR_cf, R1\n"
-//         :::"r1","r0");
-//        
-//    *p = *p & 0xFFFFFFCF;  // led off.
-//
-//    while(1);
-//}
-//
-//static void __attribute__((noreturn)) panic(int cnt)
-//{
-//	volatile long *p=(void*)LED_PR;
-//	int i;
-//
-//	for(;cnt>0;cnt--){
-//		p[0]=0x46;
-//
-//		for(i=0;i<0x200000;i++){
-//			asm ("nop\n");
-//			asm ("nop\n");
-//		}
-//		p[0]=0x44;
-//		for(i=0;i<0x200000;i++){
-//			asm ("nop\n");
-//			asm ("nop\n");
-//		}
-//	}
-//	shutdown();
-//}

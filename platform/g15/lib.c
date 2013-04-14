@@ -52,12 +52,12 @@ void camera_set_led(int led, int state, int bright) {   //TODO
 
 int get_flash_params_count(void) { return 0xa6; }                          // Found @0xff1f67a0
 
-void JogDial_CW(void){ //TODO
- _PostLogicalEventForNotPowerType(0x872, 1);  // RotateJogDialRight (in table @ ff62f34c, fw 1.00b)
+void JogDial_CW(void){
+ _PostLogicalEventForNotPowerType(0x871, 1);  // RotateJogDialRight (in table @ 0xff618754 (0xff72bc44), fw 1.00b)
 }
 
-void JogDial_CCW(void){ //TODO
- _PostLogicalEventForNotPowerType(0x873, 1);  // RotateJogDialLeft (in table @ ff62f358, fw 1.00b)
+void JogDial_CCW(void){
+ _PostLogicalEventForNotPowerType(0x872, 1);  // RotateJogDialLeft (in table @ 0xff618760 (0xff72bb87), fw 1.00b)
 }
 
 // Viewport and Bitmap values that shouldn't change across firmware versions.

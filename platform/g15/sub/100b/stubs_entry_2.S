@@ -4,4 +4,5 @@
 NHSTUB(kbd_pwr_off,						NULL_SUB)
 NHSTUB(kbd_pwr_on,						NULL_SUB)
 NHSTUB(SetZoomActuatorSpeedPercent,		NULL_SUB)
-NHSTUB(MakeDirectory_Fut,               NULL_SUB)
+
+NHSTUB(MakeDirectory_Fut,               0xff01d000)
