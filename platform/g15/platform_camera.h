@@ -20,7 +20,7 @@
 // for information on each setting. If the default values are correct for your camera then
 // don't override them again in here.
 
-    #define CAM_PROPSET                         4
+    #define CAM_PROPSET                         5
     #define CAM_DRYOS                           1
     #define CAM_DRYOS_2_3_R39                   1
     #define CAM_DRYOS_2_3_R47                   1
@@ -35,12 +35,11 @@
 
     #define CAM_HAS_ND_FILTER                   1
     #define CAM_HAS_NATIVE_ND_FILTER            1   // Camera has built-in ND filter with Canon menu support for enable/disable
-    #define CAM_SWIVEL_SCREEN                   1
- //TODO
+
     #define CAM_ADJUSTABLE_ALT_BUTTON           1
-    #define CAM_ALT_BUTTON_NAMES                { "Shrtcut", "Video", "Meter", "AE Lock", "Erase" }
-    #define CAM_ALT_BUTTON_OPTIONS              { KEY_PRINT, KEY_VIDEO, KEY_DISPLAY, KEY_AE_LOCK, KEY_ERASE }
-    #define CAM_DISP_BUTTON_NAME                "METER"
+    #define CAM_ALT_BUTTON_NAMES            { "Playback", "Video", "Display" }
+    #define CAM_ALT_BUTTON_OPTIONS          { KEY_PRINT, KEY_VIDEO, KEY_DISPLAY }
+
  //TODO
     #undef  CAM_CAN_SD_OVER_NOT_IN_MF
     #undef  CAM_CAN_UNLOCK_OPTICAL_ZOOM_IN_VIDEO
@@ -95,9 +94,9 @@
       2351, 10000,   9551, 10000,  -1902, 10000, \
        177, 10000,  -2144, 10000,  10218, 10000
 
-    // // TODO:Sensor size, DNG image size & cropping
-#define CAM_RAW_ROWPIX    4160 // Found @0xff1a77cc
-#define CAM_RAW_ROWS      3124 // Found @0xff1a77d4
+    #define CAM_RAW_ROWPIX    4160 // Found @0xff1a77cc
+    #define CAM_RAW_ROWS      3124 // Found @0xff1a77d4
+// // TODO:
     #define CAM_JPEG_WIDTH                      4400
     #define CAM_JPEG_HEIGHT                     3308
     #define CAM_ACTIVE_AREA_X1                  80
@@ -105,7 +104,7 @@
     #define CAM_ACTIVE_AREA_X2                  4484
     #define CAM_ACTIVE_AREA_Y2                  3364
 
-    // // TODO:camera name
+// // TODO:camera name
     #define PARAM_CAMERA_NAME                   4       // parameter number for GetParameterData - Camera Model name
     #define PARAM_OWNER_NAME                    7       // parameter number for GetParameterData - Owner name
     #define PARAM_ARTIST_NAME                   157     // parameter number for GetParameterData - Artist name
@@ -120,7 +119,7 @@
     #define CAM_EXT_AV_RANGE                    0       // G1X can't go below F/16 so set this to 0
     #define CAM_QUALITY_OVERRIDE                1
     #define CAM_REAR_CURTAIN                    1
- // TODO
+
     #undef CAM_USES_ASPECT_CORRECTION
     #define CAM_USES_ASPECT_CORRECTION          1       //camera uses the modified graphics primitives to map screens an viewports to buffers more sized 
     #undef CAM_BITMAP_WIDTH
@@ -135,7 +134,7 @@
     #define EDGE_HMARGIN 2
 
     #define CAM_DATE_FOLDER_NAMING              1
- //TODO
+
     #define CAM_STARTUP_CRASH_FILE_OPEN_FIX     1       // enable fix for camera crash at startup when opening the conf / font files
                                                         // see http://chdk.setepontos.com/index.php?topic=6179.0
 
@@ -147,9 +146,6 @@
                                                         // see http://chdk.setepontos.com/index.php/topic,3994.405.html
  //TODO
     #define CAM_AV_OVERRIDE_IRIS_FIX            1       // for cameras that require _MoveIrisWithAv function to override Av in bracketing.
- //TODO
-    #define CAM_DISABLE_RAW_IN_HQ_BURST         1       // For cameras with 'HQ Burst' mode that does not work with raw define this
-    #define CAM_DISABLE_RAW_IN_HANDHELD_NIGHT_SCN 1     // For cameras with 'HandHeld Night Scene' mode that does not work with raw define this
     #define  CAM_HAS_MOVIE_DIGEST_MODE          1       // Changes the values in the 'movie_status' variable if the camera has this mode
  //TODO
     #define CAM_LOAD_CUSTOM_COLORS              1       // Enable loading CHDK colors into the camera palette memory/hardware
@@ -162,10 +158,10 @@
 
     #define CAM_HAS_CMOS                        1
 
-    #undef  CAMERA_MIN_DIST // TODO
-    #define CAMERA_MIN_DIST                     275     // Override min subject distance
-    #undef  CAMERA_MAX_DIST // TODO
-    #define CAMERA_MAX_DIST                     660067  // Override max subject distance
+    #undef  CAMERA_MIN_DIST
+    #define CAMERA_MIN_DIST                     70     // Override min subject distance
+    #undef  CAMERA_MAX_DIST
+    #define CAMERA_MAX_DIST                     10567  // Override max subject distance
 
     #define MKDIR_RETURN_ONE_ON_SUCCESS         1       // mkdir() return 1 on success, 0 on fail.
 

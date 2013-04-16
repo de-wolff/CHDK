@@ -8,5 +8,8 @@ Alpha CHDK for G15.
 Development notes:
 ---
 Known issues:
-    - Currently only firmware 1.00b is supported.
+    - Custom palette is kind of broken
+    - AutoISO seems to break
+    - Saving RAW breaks
+    - ???
 

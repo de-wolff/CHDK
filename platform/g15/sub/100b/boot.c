@@ -178,14 +178,14 @@ void __attribute__((naked,noinline)) HookIntoTaskCreateFunktion() {
 
 		"STMFD   SP!, {R0-R3,LR}\n" // Save all register which are used below
 		/* Install HOOK #1 */
-		"LDR     R0, = PatchCodeHook1\n" // R0 = Start adr. of our hook code call (SRC)
+		"LDR     R0, =PatchCodeHook1\n" // R0 = Start adr. of our hook code call (SRC)
 		"LDR     R1, =0x68AF04\n"	     // Get start adress of function to patch (DST)
 		"MOV     R2, #(PatchCodeHook1End-PatchCodeHook1)/4\n" // WORDs to copy (lenght of patch bytes/4)
 		"BL      code_copy\n"
 
 		/* Install HOOK #2 */
-		"LDR     R0, = PatchCodeHook2\n" // Get start adr. of our hook code call (SRC)
-		"LDR     R1, = 0x68AB8C\n"	// Get start adress of function to patch (DST)
+		"LDR     R0, =PatchCodeHook2\n" // Get start adr. of our hook code call (SRC)
+		"LDR     R1, =0x68AB8C\n"	// Get start adress of function to patch (DST) (_CreateTask)
 		"MOV     R2, #(PatchCodeHook2End-PatchCodeHook2)/4\n" // WORDs to copy (lenght of patch bytes/4)
 		"BL      code_copy\n"
 
@@ -244,7 +244,7 @@ void __attribute__((naked,noinline)) TaskHookFnc1() {
     // how to find the Original Task create function:
     // 1) find original TaskHookFnc2
     // 2) go to the caller
-    // 3) adjust addresses ROM->RAM (unneeded?)
+    // 3) adjust addresses ROM->RAM
       "    STMFD   SP!, {R3-R5,LR} \n" 
       "    MOV     R12, R3 \n" 
       "    LDR     R3, [SP, #0x10] \n" 
@@ -277,7 +277,7 @@ void __attribute__((naked,noinline)) TaskHookFnc2() {
 	// how to find the function:
     // 1) jump to ROM-to-be-copied-to-RAM address
     // 2) search for KerTask.c, you have your function
-    // 3) adjust addresses ROM->RAM (unneeded?)
+    // 3) adjust addresses ROM->RAM
       "    STMFD   SP!, {R1-R9,LR} \n" 
       "    MOV     R4, R0 \n" 
       "    LDR     R0, =0xFF0003FC \n" 
@@ -325,12 +325,13 @@ void __attribute__((naked,noinline)) TaskHookFnc2() {
       "    BL      sub_6858AC \n" // FF74646C−ff745bc0+685000
       "    MOV     R0, R4, LSL #1 \n" 
       "    LDMFD   SP!, {R1-R9,PC} \n" 
+
 	);
 }
 
 void __attribute__((naked,noinline)) sub_FF00038C_my() {
 
-    if ( (*(int*)0xC022F48C & 0x8000000) )
+    if ( (*(int*)0xC022F48C & 0x800000) )
 		*(int*)(0x2D30+0x4) = 0x2000000;  // Playmode "PhySwConfig.c" @ FF05DE7C
 	else
 		*(int*)(0x2D30+0x4) = 0x1000000; // Shootingmode
@@ -628,14 +629,15 @@ void __attribute__((naked,noinline)) init_file_modules_task() {
       "    MOVS    R4, R0 \n" 
       "    MOVNE   R1, #0 \n" 
       "    MOVNE   R0, R5 \n" 
-      "   BLNE     _PostLogicalEventToUI \n"
+      "    BLNE     _PostLogicalEventToUI \n"
       "    BL      sub_FF099F60 \n" 
 "BL      core_spytask_can_start\n"      // CHDK: Set "it's-safe-to-start" flag for spytask
+      "    CMP     R4, #0 \n" 
       "    LDMNEFD SP!, {R4-R6,PC} \n" 
       "    MOV     R0, R5 \n" 
       "    LDMFD   SP!, {R4-R6,LR} \n" 
       "    MOV     R1, #0 \n" 
-      "   B        _PostLogicalEventToUI \n"
+      "    B        _PostLogicalEventToUI \n"
  );
 }
 

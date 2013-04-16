@@ -16,7 +16,7 @@ static long kbd_mod_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 
 extern void _GetKbdState(long*);
 
-#define KEYS_MASK0 (0x0034F800)
+#define KEYS_MASK0 (0x00B4F800)
 #define KEYS_MASK1 (0x00000000)
 #define KEYS_MASK2 (0x000C8800)
 
@@ -38,11 +38,13 @@ static KeyMap keymap[] = {
     { 0, KEY_SET             ,0x00000800 }, // Found @0xff4a0d2c, levent 0x08
     { 0, KEY_RIGHT           ,0x00001000 }, // Found @0xff4a0d34, levent 0x07
     { 0, KEY_DOWN            ,0x00002000 }, // Found @0xff4a0d3c, levent 0x05
+    { 0, KEY_DISPLAY         ,0x00002000 }, // ^
     { 0, KEY_MENU            ,0x00004000 }, // Found @0xff4a0d44, levent 0x09
     { 0, KEY_LEFT            ,0x00008000 }, // Found @0xff4a0d4c, levent 0x06
     { 0, KEY_UP              ,0x00040000 }, // Found @0xff4a0d64, levent 0x04
     { 0, KEY_ZOOM_IN         ,0x00100000 }, // Found @0xff4a0d74, levent 0x02
     { 0, KEY_ZOOM_OUT        ,0x00200000 }, // Found @0xff4a0d7c, levent 0x03
+    { 0, KEY_VIDEO           ,0x00800000 },
     { 2, KEY_POWER           ,0x00000800 }, // Found @0xff4a0dc4, levent 0x100
     { 2, KEY_PLAYBACK        ,0x00008000 }, // Found @0xff4a0dcc, levent 0x101
     { 2, KEY_PRINT           ,0x00008000 }, // ALT button
@@ -92,7 +94,7 @@ volatile int jogdial_stopped=0;
 // Pointer to stack location where jogdial task records previous and current
 // jogdial positions
 extern short* jog_position;
-extern short rear_dial_position, front_dial_position;
+extern short rear_dial_position;
 
 void jogdial_control(int n)
 {
@@ -101,7 +103,6 @@ void jogdial_control(int n)
         // If re-enabling jogdial set the task code current & previous positions to the actual
         // dial positions so that the change won't get processed by the firmware
         jog_position[0] = jog_position[2] = rear_dial_position;   // Rear dial
-        jog_position[1] = jog_position[3] = front_dial_position;  // Front dial
     }
     jogdial_stopped = n;
 }
@@ -231,19 +232,14 @@ long kbd_get_clicked_key()
 	return 0;
 }
 
-static short new_jogdial = 0, old_jogdial = 0, new_frontdial = 0, old_frontdial = 0;
+static short new_jogdial = 0, old_jogdial = 0;
 
 long get_jogdial_direction(void)
 {
     old_jogdial = new_jogdial;
     new_jogdial = rear_dial_position;
 
-    old_frontdial = new_frontdial;
-    new_frontdial = front_dial_position;
-
     if      (old_jogdial < new_jogdial)     return JOGDIAL_LEFT;
     else if (old_jogdial > new_jogdial)     return JOGDIAL_RIGHT;
-    else if (old_frontdial > new_frontdial) return FRONTDIAL_LEFT;
-    else if (old_frontdial < new_frontdial) return FRONTDIAL_RIGHT;
     else                                    return 0;
 }
