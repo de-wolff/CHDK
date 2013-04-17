@@ -40,13 +40,12 @@
     #define CAM_ALT_BUTTON_NAMES            { "Playback", "Video", "Display" }
     #define CAM_ALT_BUTTON_OPTIONS          { KEY_PRINT, KEY_VIDEO, KEY_DISPLAY }
 
- //TODO
     #undef  CAM_CAN_SD_OVER_NOT_IN_MF
     #undef  CAM_CAN_UNLOCK_OPTICAL_ZOOM_IN_VIDEO
     #define CAM_HAS_VIDEO_BUTTON                1
     #define CAM_VIDEO_QUALITY_ONLY              1
     #define CAM_BRACKETING                      1
-    #undef  CAM_VIDEO_CONTROL                       // Crashes camera if enabled
+    #undef  CAM_VIDEO_CONTROL
     #define CAM_HAS_JOGDIAL                     1
     #undef  CAM_USE_ZOOM_FOR_MF
     #define CAM_SHOW_OSD_IN_SHOOT_MENU          1
@@ -56,13 +55,8 @@
 
     #undef  CAM_MENU_BORDERWIDTH
     #define CAM_MENU_BORDERWIDTH                10
- //TODO
-    #undef  CAM_MARKET_ISO_BASE
-    #define CAM_MARKET_ISO_BASE                 200 // Override base 'market' ISO value
-    #define CAM_MIN_ISO_OVERRIDE                70  // Defines min (non-zero) ISO override value - lower value may crash if flash used [0 = AUTO, so always allowed]
 
-    // TODO: bayer sensor pattern
-    #define cam_CFAPattern                      0x02010100 // Red  Green  Green  Blue
+    #define cam_CFAPattern                      0x01000201 // [Green Blue Red Green]
 
     #define CAM_DNG_LENS_INFO                   { 61,10, 305,10, 18,10, 28,10 }    // See comments in camera.h
 
@@ -97,19 +91,16 @@
     #define CAM_RAW_ROWPIX    4160 // Found @0xff1a77cc
     #define CAM_RAW_ROWS      3124 // Found @0xff1a77d4
 
-    #define CAM_JPEG_WIDTH                      4000
-    #define CAM_JPEG_HEIGHT                     3000
-// // TODO:
-    #define CAM_ACTIVE_AREA_X1                  80
-    #define CAM_ACTIVE_AREA_Y1                  52
-    #define CAM_ACTIVE_AREA_X2                  4484
-    #define CAM_ACTIVE_AREA_Y2                  3364
+    #define CAM_JPEG_WIDTH                      4034
+    #define CAM_JPEG_HEIGHT                     3040
 
-// // TODO:camera name
+    #define CAM_ACTIVE_AREA_X1                  105
+    #define CAM_ACTIVE_AREA_Y1                  12
+    #define CAM_ACTIVE_AREA_X2                  4139
+    #define CAM_ACTIVE_AREA_Y2                  3052
+
     #define PARAM_CAMERA_NAME                   4       // parameter number for GetParameterData - Camera Model name
     #define PARAM_OWNER_NAME                    7       // parameter number for GetParameterData - Owner name
-    #define PARAM_ARTIST_NAME                   157     // parameter number for GetParameterData - Artist name
-    #define PARAM_COPYRIGHT                     158     // parameter number for GetParameterData - Copyright
     #define PARAM_DISPLAY_MODE1                 59      // param number for LCD display mode when camera in playback
     #define PARAM_DISPLAY_MODE2                 62      // param number for LCD display mode when camera in record view hold mode
     #undef  CAM_SENSOR_BITS_PER_PIXEL
@@ -139,16 +130,16 @@
 
     #undef  CAM_KEY_PRESS_DELAY
     #define CAM_KEY_PRESS_DELAY                 60      // delay after a press
- //TODO
+
     #define CAM_DRIVE_MODE_FROM_TIMER_MODE      1       // use PROPCASE_TIMER_MODE to check for multiple shot custom timer.
                                                         // Used to enabled bracketing in custom timer, required on many recent cameras
                                                         // see http://chdk.setepontos.com/index.php/topic,3994.405.html
- //TODO
+
     #define CAM_AV_OVERRIDE_IRIS_FIX            1       // for cameras that require _MoveIrisWithAv function to override Av in bracketing.
-    #define  CAM_HAS_MOVIE_DIGEST_MODE          1       // Changes the values in the 'movie_status' variable if the camera has this mode
- //TODO
+    #define CAM_HAS_MOVIE_DIGEST_MODE          1       // Changes the values in the 'movie_status' variable if the camera has this mode
+
     #define CAM_LOAD_CUSTOM_COLORS              1       // Enable loading CHDK colors into the camera palette memory/hardware
-    #define CHDK_COLOR_BASE                     0xA8    // Start color index for CHDK colors loaded into camera palette.
+    #define CHDK_COLOR_BASE                     0xC0    // Start color index for CHDK colors loaded into camera palette.
 
     #undef  CAM_USB_EVENTID
     #define CAM_USB_EVENTID                     0x202   // Levent ID for USB control. Changed in DryOS R49 so needs to be overridable.

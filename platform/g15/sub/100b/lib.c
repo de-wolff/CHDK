@@ -2,7 +2,7 @@
 
 char *hook_raw_image_addr()
 {
-	if (*((int*)(0x38fc + 0xC)) != 0) //G15: 0x3B14 (@ff089bd8 ) + 0xC (@ff089c04)
+	if (*((int*)(0x38fc + 0xC)) != 0) //G15: 0x38fc (@ff089bd8 ) + 0xC (@ff089c04)
         return (char*) 0x4ad65bc0;
     else
         return (char*) 0x44000000;
