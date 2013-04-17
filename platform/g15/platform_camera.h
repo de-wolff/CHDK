@@ -96,9 +96,10 @@
 
     #define CAM_RAW_ROWPIX    4160 // Found @0xff1a77cc
     #define CAM_RAW_ROWS      3124 // Found @0xff1a77d4
+
+    #define CAM_JPEG_WIDTH                      4000
+    #define CAM_JPEG_HEIGHT                     3000
 // // TODO:
-    #define CAM_JPEG_WIDTH                      4400
-    #define CAM_JPEG_HEIGHT                     3308
     #define CAM_ACTIVE_AREA_X1                  80
     #define CAM_ACTIVE_AREA_Y1                  52
     #define CAM_ACTIVE_AREA_X2                  4484
@@ -113,10 +114,8 @@
     #define PARAM_DISPLAY_MODE2                 62      // param number for LCD display mode when camera in record view hold mode
     #undef  CAM_SENSOR_BITS_PER_PIXEL
     #define CAM_SENSOR_BITS_PER_PIXEL           12
- // TODO
+
     #define CAM_EXT_TV_RANGE                    1
-    #undef CAM_EXT_AV_RANGE
-    #define CAM_EXT_AV_RANGE                    0       // G1X can't go below F/16 so set this to 0
     #define CAM_QUALITY_OVERRIDE                1
     #define CAM_REAR_CURTAIN                    1
 
