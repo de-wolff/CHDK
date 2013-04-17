@@ -16,7 +16,7 @@ static long kbd_mod_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 
 extern void _GetKbdState(long*);
 
-#define KEYS_MASK0 (0x00B4F800)
+#define KEYS_MASK0 (0x003CF800)
 #define KEYS_MASK1 (0x00000000)
 #define KEYS_MASK2 (0x000C8800)
 
@@ -44,7 +44,7 @@ static KeyMap keymap[] = {
     { 0, KEY_UP              ,0x00040000 }, // Found @0xff4a0d64, levent 0x04
     { 0, KEY_ZOOM_IN         ,0x00100000 }, // Found @0xff4a0d74, levent 0x02
     { 0, KEY_ZOOM_OUT        ,0x00200000 }, // Found @0xff4a0d7c, levent 0x03
-    { 0, KEY_VIDEO           ,0x00800000 },
+    { 0, KEY_VIDEO           ,0x00080000 },
     { 2, KEY_POWER           ,0x00000800 }, // Found @0xff4a0dc4, levent 0x100
     { 2, KEY_PLAYBACK        ,0x00008000 }, // Found @0xff4a0dcc, levent 0x101
     { 2, KEY_PRINT           ,0x00008000 }, // ALT button
