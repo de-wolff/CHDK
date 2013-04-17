@@ -8,6 +8,7 @@ Alpha CHDK for G15.
 Development notes:
 ---
 Known issues:
-    - LEDs informations missing
+    - Debug LEDs address
+    - DNG color matrix informations missing
     - ???
 

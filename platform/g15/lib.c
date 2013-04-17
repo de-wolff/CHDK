@@ -42,11 +42,13 @@ void debug_led(int state)   //TODO
 
 
 
-
-// Power Led = first entry in table (led 0)
-// AF Assist Lamp = second entry in table (led 1)
-void camera_set_led(int led, int state, int bright) {   //TODO
- static char led_table[2]={0,5};
+// G15 led values:
+// 0 Upper indicator Green
+// 1 Lower indicator Orange
+// 2 Power LED Green
+// 4 AF Assist Lamp
+void camera_set_led(int led, int state, int bright) {
+ static char led_table[3] = {0, 1, 2, 4};
  _LEDDrive(led_table[led%sizeof(led_table)], state<=1 ? !state : state);
 }
 
