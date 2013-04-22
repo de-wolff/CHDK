@@ -83,14 +83,14 @@ Smart Shutter Modes:
     Smile, Wink Self-timer, Face Self-timer
 
 */
-// TODO: complete/fix this
+
 const CapturemodeMap modemap[] = {
 	{ MODE_VIDEO_STD,           2626  },
     { MODE_VIDEO_SUPER_SLOW,    2631  },
     { MODE_VIDEO_IFRAME_MOVIE,  2633  },
 	{ MODE_SCN_COLOR_ACCENT,    8737  },
 	{ MODE_SCN_COLOR_SWAP,      8738  },
-    //{ MODE_,                  8745  },
+    //{ MODE_???,                 8745  },
 	{ MODE_SCN_SUPER_VIVID,     8746  },
 	{ MODE_SCN_POSTER_EFFECT,   8747  },
 	{ MODE_SCN_FISHEYE,         8751  },
@@ -135,7 +135,6 @@ long get_target_file_num() {
 }
 
 #if defined(CAM_DATE_FOLDER_NAMING)
-// TODO: uses date to name directory
 void get_target_dir_name(char *out)
 {
 	extern void _GetImageFolder(char*,int,int,int);
@@ -151,4 +150,4 @@ long get_target_dir_num() {
 }
 #endif
 
-int circle_of_confusion = 7; // TODO: this is G12
+int circle_of_confusion = 6; // from EXIF data

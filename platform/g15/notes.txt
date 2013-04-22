@@ -1,14 +1,13 @@
 ****************************************
-Camera depending notes: 
-* DryOS Camera
----
-Alpha CHDK for G15.
-
+Beta CHDK for G15
 ****************************************
 Development notes:
 ---
 Known issues:
-    - Debug LEDs address
-    - DNG color matrix informations missing
-    - ???
+    - none
 
+TODO:
+    - Debug LEDs address and ON/OFF mechanism in lib.c
+    - DNG color matrix informations missing in platform_camera.h
+    - EXMEM unimplemented
+    - ???

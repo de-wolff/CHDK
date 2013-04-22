@@ -25,14 +25,6 @@ void startup()
 
 	boot();
 }
-// TODO:
-int screen_opened(void) {
-	return (physw_status[2] & 0x00002000);
-}
-// TODO:
-int screen_rotated(void) {
-	return !(physw_status[2] & 0x00001000);
-}
 
 #define NUM_FL      121 // 0 - 100, entries in firmware
 #define NUM_DATA    2   // 2 words each entry, first is FL

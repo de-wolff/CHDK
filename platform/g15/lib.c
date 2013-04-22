@@ -41,14 +41,13 @@ void debug_led(int state)   //TODO
 }
 
 
-
 // G15 led values:
 // 0 Upper indicator Green
 // 1 Lower indicator Orange
 // 2 Power LED Green
 // 4 AF Assist Lamp
 void camera_set_led(int led, int state, int bright) {
- static char led_table[3] = {0, 1, 2, 4};
+ static char led_table[4] = {0, 1, 2, 4};
  _LEDDrive(led_table[led%sizeof(led_table)], state<=1 ? !state : state);
 }
 
@@ -110,7 +109,6 @@ int vid_get_viewport_width()
     return _GetVRAMHPixelsSize() >> 1;
 }
 
-// TODO: everything below this line
 // viewport width offset table for each image size
 // 0 = 4:3, 1 = 16:9, 2 = 3:2, 3 = 1:1, 4 = 4:5
 static long vp_xo[5] = { 0, 0, 0, 44, 72 };				// should all be even values for edge overlay

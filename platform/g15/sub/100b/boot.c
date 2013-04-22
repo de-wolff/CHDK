@@ -11,26 +11,6 @@ const char * const new_sa = &_end;
 extern volatile int jogdial_stopped;
 void JogDial_task_my(void);
 
-//void __attribute__((naked,noinline)) my_blinker(int n) {
-//	asm volatile (
-//"                STMFD   SP!, {R0-R5,LR}\n"
-//);
-//	volatile long *p=(void*)0xC022C30C;
-//	int i, j;
-//	for (j=0; j<n; j++)
-//	{
-//		*p = (*p & 0xFFFFFFCF) | 0x20; // Turn on LED
-//		for (i=0; i<0x200000; i++) { asm volatile ( "nop\n" ); }
-//
-//		*p = (*p & 0xFFFFFFCF);		 // Turn on LED
-//		for (i=0; i<0x200000; i++) { asm volatile ( "nop\n" ); }
-//	}
-//	for (i=0; i<0x900000; i++) { asm volatile ( "nop\n" ); }
-//	asm volatile (
-//"                LDMFD   SP!, {R0-R5,PC}\n"
-//	);
-//}
-
 extern void task_CaptSeq();
 extern void task_InitFileModules();
 extern void task_RotaryEncoder();
