@@ -56,7 +56,7 @@
     #undef  CAM_MENU_BORDERWIDTH
     #define CAM_MENU_BORDERWIDTH                10
 
-    #define cam_CFAPattern                      0x01000201 // [Green Blue Red Green]
+    #define cam_CFAPattern                      0x00010102 // Blue Green Green Red
 
     #define CAM_DNG_LENS_INFO                   { 61,10, 305,10, 18,10, 28,10 }    // See comments in camera.h
 
@@ -89,6 +89,7 @@
       6617, 10000,   3849, 10000,   -823, 10000, \
       2400, 10000,  11138, 10000,  -3538, 10000, \
        -62, 10000,  -1147, 10000,   9460, 10000
+    #define CAM_DNG_EXPOSURE_BIAS -3,4
 
     #define CAM_RAW_ROWPIX    4160 // Found @0xff1a77cc
     #define CAM_RAW_ROWS      3124 // Found @0xff1a77d4
