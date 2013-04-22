@@ -8,6 +8,5 @@ Known issues:
 
 TODO:
     - Debug LEDs address and ON/OFF mechanism in lib.c
-    - DNG color matrix informations missing in platform_camera.h
     - EXMEM unimplemented
     - ???
