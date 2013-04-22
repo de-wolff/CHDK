@@ -56,8 +56,6 @@
     #undef  CAM_MENU_BORDERWIDTH
     #define CAM_MENU_BORDERWIDTH                10
 
-    #define cam_CFAPattern                      0x00010102 // Blue Green Green Red
-
     #define CAM_DNG_LENS_INFO                   { 61,10, 305,10, 18,10, 28,10 }    // See comments in camera.h
 
     // From G15 native RAW file as converted to DNG using Adobe DNG Converter
@@ -96,11 +94,13 @@
 
     #define CAM_JPEG_WIDTH                      4034
     #define CAM_JPEG_HEIGHT                     3040
-
-    #define CAM_ACTIVE_AREA_X1                  105
-    #define CAM_ACTIVE_AREA_Y1                  12
-    #define CAM_ACTIVE_AREA_X2                  4139
-    #define CAM_ACTIVE_AREA_Y2                  3052
+    // G15 native RAW converted to DNG's EXIF data: Active Area
+    #define CAM_ACTIVE_AREA_X1                  104
+    #define CAM_ACTIVE_AREA_Y1                  11
+    #define CAM_ACTIVE_AREA_X2                  4152
+    #define CAM_ACTIVE_AREA_Y2                  3059
+    // G15 native RAW converted to DNG's EXIF data: CFA Pattern
+    #define cam_CFAPattern                      0x02010100 // [Red,Green][Green,Blue]
 
     #define PARAM_CAMERA_NAME                   4       // parameter number for GetParameterData - Camera Model name
     #define PARAM_OWNER_NAME                    7       // parameter number for GetParameterData - Owner name
