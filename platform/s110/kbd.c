@@ -14,10 +14,9 @@ static long kbd_new_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 static long kbd_prev_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 static long kbd_mod_state[3] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
 
-static long last_kbd_key = 0;
 extern void _GetKbdState(long*);
 
-#define KEYS_MASK0 (0x000180EE)
+#define KEYS_MASK0 (0x000181EF)
 #define KEYS_MASK1 (0x00C00000)
 #define KEYS_MASK2 (0x000000C0)
 
@@ -35,14 +34,16 @@ int get_usb_bit()
 	return(( usb_physw[USB_IDX] & USB_MASK)==USB_MASK) ; 
 }
 
-// Keymap values for kbd.c. Additional keys may be present, only common values included here.
 static KeyMap keymap[] = {
+    { 0, KEY_ERASE           ,0x00000001 }, // RING FUNC
     { 0, KEY_DOWN            ,0x00000002 }, // Found @0xf864bbbc, levent 0x05
+    { 0, KEY_DISPLAY         ,0x00000002 }, // ^
     { 0, KEY_LEFT            ,0x00000004 }, // Found @0xf864bbc4, levent 0x06
     { 0, KEY_MENU            ,0x00000008 }, // Found @0xf864bbcc, levent 0x09
     { 0, KEY_SET             ,0x00000020 }, // Found @0xf864bbdc, levent 0x08
     { 0, KEY_UP              ,0x00000040 }, // Found @0xf864bbe4, levent 0x04
     { 0, KEY_RIGHT           ,0x00000080 }, // Found @0xf864bbec, levent 0x07
+    { 0, KEY_VIDEO           ,0x00000100 },
     { 0, KEY_ZOOM_OUT        ,0x00008000 }, // Found @0xf864bc2c, levent 0x03
     { 0, KEY_ZOOM_IN         ,0x00010000 }, // Found @0xf864bc34, levent 0x02
     { 1, KEY_POWER           ,0x00400000 }, // Found @0xf864bc54, levent 0x100
@@ -54,22 +55,12 @@ static KeyMap keymap[] = {
     { 0, 0, 0 }
 };
 
-long __attribute__((naked,noinline)) wrap_kbd_p1_f() {
-	asm volatile(
-        "STMFD   SP!, {R1-R7,LR}\n"  
-        "MOV     R5, #0\n"					
-        "BL      my_kbd_read_keys\n"
-        "B       _kbd_p1_f_cont\n"
-    );
-	
-	return 0;
-}
+long __attribute__((naked)) wrap_kbd_p1_f() ;
 
 static void __attribute__((noinline)) mykbd_task_proceed()
 {
 	while (physw_run){
-		//_SleepTask(*((int*)0x1c18)); //10); // TODO: how to find this address?
-        _SleepTask(10);
+		_SleepTask(physw_sleep_delay);
 
 		if (wrap_kbd_p1_f() == 1){ // autorepeat ?
 			_kbd_p2_f();
@@ -86,8 +77,21 @@ mykbd_task()
     _ExitTask();
 }
 
+long __attribute__((naked,noinline)) wrap_kbd_p1_f()
+{
+	asm volatile(
+		"STMFD   SP!, {R1-R7,LR}\n"
+		"MOV     R5, #0\n"
+		//"BL      _kbd_read_keys \n"
+		"BL		my_kbd_read_keys\n"
+		"B       _kbd_p1_f_cont\n"
+	);
+	return 0; // shut up the compiler
+}
+
 // Set to 1 to disable jogdial events from being processed in firmware
 volatile int jogdial_stopped=0;
+
 // Pointer to stack location where jogdial task records previous and current
 // jogdial positions
 extern short* jog_position;
@@ -99,7 +103,7 @@ void jogdial_control(int n)
     {
         // If re-enabling jogdial set the task code current & previous positions to the actual
         // dial positions so that the change won't get processed by the firmware
-        jog_position[0] = jog_position[2] = rear_dial_position;   // TODO: Rear dial in stubs_min.S
+        jog_position[0] = jog_position[2] = rear_dial_position;   // Rear dial
     }
     jogdial_stopped = n;
 }
@@ -114,11 +118,11 @@ void my_kbd_read_keys()
 	_kbd_read_keys_r2(kbd_new_state);
 
 	if (kbd_process() == 0){
-        // leave it alone...
-        physw_status[0] = kbd_new_state[0];
-        physw_status[1] = kbd_new_state[1];
-        physw_status[2] = kbd_new_state[2];
-        jogdial_control(0);
+		// leave it alone...
+          physw_status[0] = kbd_new_state[0];
+          physw_status[1] = kbd_new_state[1];
+          physw_status[2] = kbd_new_state[2];
+          jogdial_control(0);
 
 	} else {
 		// override keys
@@ -134,12 +138,13 @@ void my_kbd_read_keys()
 		else if (jogdial_stopped && camera_info.state.state_kbd_script_run) jogdial_control(0);
 	}
 
-	usb_remote_key();
+	//_kbd_read_keys_r2(physw_status);
 
+	usb_remote_key() ;
+
+    physw_status[SD_READONLY_IDX] = physw_status[SD_READONLY_IDX] & ~SD_READONLY_FLAG;
 	if (conf.remote_enable) {
-		physw_status[USB_IDX] = physw_status[USB_IDX] & ~(SD_READONLY_FLAG | USB_MASK);
-	} else {
-		physw_status[USB_IDX] = physw_status[USB_IDX] & ~SD_READONLY_FLAG;
+		physw_status[USB_IDX] = physw_status[USB_IDX] & ~USB_MASK;
 	}
 
 }
@@ -149,7 +154,6 @@ void my_kbd_read_keys()
 
 void kbd_set_alt_mode_key_mask(long key)
 {
-    // not needed
 }
 
 void kbd_key_press(long key)
@@ -229,49 +233,14 @@ long kbd_get_clicked_key()
 	return 0;
 }
 
-void kbd_reset_autoclicked_key() {
-	last_kbd_key = 0;
-}
-
-long kbd_get_autoclicked_key() {
-	static long last_kbd_time = 0, press_count = 0;
-	register long key, t;
-
-	key=kbd_get_clicked_key();
-	if (key) {
-		last_kbd_key = key;
-		press_count = 0;
-		last_kbd_time = get_tick_count();
-		return key;
-	} else {
-		if (last_kbd_key && kbd_is_key_pressed(last_kbd_key)) {
-			t = get_tick_count();
-			if (t-last_kbd_time>((press_count)?175:500)) {
-				++press_count;
-				last_kbd_time = t;
-				return last_kbd_key;
-			} else {
-				return 0;
-			}
-		} else {
-			last_kbd_key = 0;
-			return 0;
-		}
-	}
-}
-
-long kbd_use_zoom_as_mf() {
- return 0;
-}
-
-
-static short new_jogdial=0, old_jogdial=0;
+static short new_jogdial = 0, old_jogdial = 0;
 
 long get_jogdial_direction(void)
 {
     old_jogdial = new_jogdial;
     new_jogdial = rear_dial_position;
-    if (old_jogdial < new_jogdial) return JOGDIAL_LEFT;
-    else if (old_jogdial > new_jogdial) return JOGDIAL_RIGHT;
-    else return 0;
+
+    if      (old_jogdial < new_jogdial)     return JOGDIAL_LEFT;
+    else if (old_jogdial > new_jogdial)     return JOGDIAL_RIGHT;
+    else                                    return 0;
 }

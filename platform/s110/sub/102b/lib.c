@@ -21,7 +21,8 @@ char *camera_jpeg_current_filename() {
 }
 
 void *vid_get_bitmap_fb()        { return (void*)0x406c5000; }             // Found @0xf8074fa0
-void *vid_get_viewport_fb()      { return (void*)0x4081ab80; }             // Found @0xf8518e9c
+void *vid_get_viewport_fb()      { return (void*)0x4081ab80; }             // Found @0xf8519358
 void *vid_get_viewport_fb_d()    { return (void*)(*(int*)(0x3838+0x54)); } // Found @0xf8095da8 & 0xf8095de0
-char *camera_jpeg_count_str()    { return (char*)0x001ad150; }             // Found @0xf831935c
-long hook_raw_size()             { return 0x01297380; }                    // Found @0xf851a838
+char *camera_jpeg_count_str()    { return (char*)0x001ad150; }             // Found @0xf8319350
+long hook_raw_size()             { return 0x01297380; }                    // Found @0xf851acf4
+

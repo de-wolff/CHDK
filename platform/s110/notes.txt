@@ -1,4 +1,11 @@
-S110 NOTES
-CAMERA TODO/KNOWN ISSUES:
+****************************************
+Beta CHDK for S110
+****************************************
+Development notes:
+---
+Known issues:
+    - none
 
-
+TODO:
+    - EXMEM unimplemented
+    - ???

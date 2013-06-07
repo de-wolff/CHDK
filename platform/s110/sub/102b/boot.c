@@ -115,7 +115,7 @@ asm volatile (
       "    LDR     R1, [R2] \n" 
       "    ORR     R1, R1, #1 \n" 
       "    STR     R1, [R2] \n" 
-      "    LDR     R0, =0xF896E790 \n" 
+      "    LDR     R0, =0xF896E004 \n" 
       "    LDR     R1, =0x685000 \n" 
       "    LDR     R3, =0x6B3264 \n" 
 "loc_F8000144:\n"
@@ -123,15 +123,15 @@ asm volatile (
       "    LDRCC   R2, [R0], #4 \n" 
       "    STRCC   R2, [R1], #4 \n" 
       "    BCC     loc_F8000144 \n" 
-      "    LDR     R0, =0xF8953CD0 \n" 
+      "    LDR     R0, =0xF8953558 \n" 
       "    LDR     R1, =0x1900 \n" 
-      "    LDR     R3, =0x1C3C0 \n" 
+      "    LDR     R3, =0x1C3AC \n" 
 "loc_F8000160:\n"
       "    CMP     R1, R3 \n" 
       "    LDRCC   R2, [R0], #4 \n" 
       "    STRCC   R2, [R1], #4 \n" 
       "    BCC     loc_F8000160 \n" 
-      "    LDR     R1, =0x28C088 \n" 
+      "    LDR     R1, =0x28BC88 \n" 
       "    MOV     R2, #0 \n" 
 "loc_F8000178:\n"
       "    CMP     R3, R1 \n" 
@@ -326,7 +326,7 @@ void __attribute__((naked,noinline)) TaskHookFnc2() {
 
 void __attribute__((naked,noinline)) sub_F800038C_my() {
 
- if ( (*(int*)0xC022F48C & 0x800000) )
+ if ( (*(int*)0xC022F48C & 0x4) )
 		*(int*)(0x2FF0+0x4) = 0x200000;  // Playmode "PhySwConfig.c" @f807b174
 	else
 		*(int*)(0x2FF0+0x4) = 0x100000; // Shootingmode
@@ -373,7 +373,7 @@ void __attribute__((naked,noinline)) sub_F800116C_my() {
       "    SUB     SP, SP, #0x74 \n" 
       "    MOV     R1, #0x74 \n" 
       "    MOV     R0, SP \n" 
-      "    BL      sub_F86488EC \n" 
+      "    BL      sub_F8648174 \n" 
       "    MOV     R0, #0x83000 \n" 
       "    STR     R0, [SP, #4] \n" 
 	#if defined(OPT_CHDK_IN_EXMEM) 
@@ -414,11 +414,11 @@ void __attribute__((naked,noinline)) sub_F800116C_my() {
       "    STR     R0, [SP, #0x64] \n" 
       "    MOV     R0, #0x280 \n" 
       "    STR     R0, [SP, #0x68] \n" 
-      //"    LDR     R1, =0xF8004264 \n" 
+//      "    LDR     R1, =0xF8004264 \n" 
       "    LDR     R1, =sub_F8004264_my \n" 
       "    MOV     R2, #0 \n" 
       "    MOV     R0, SP \n" 
-      "    BL      sub_F86488F4 \n" 
+      "    BL      sub_F864817C \n" 
       "    ADD     SP, SP, #0x74 \n" 
       "    LDR     PC, [SP], #4 \n" 
 	 );
@@ -487,7 +487,7 @@ void __attribute__((naked,noinline)) sub_F800CCB4_my() {
 "loc_F800CCD4:\n"
       "    MOV     R0, #0 \n" 
 "loc_F800CCD8:\n"
-//      "    BL      sub_F80211F4 \n" 
+      //"    BL      sub_F80211F4 \n" 
       "    BL      sub_F80211F4_my \n" 
       "    CMP     R0, #0 \n" 
       "    BNE     loc_F800CCF8 \n" 
@@ -498,22 +498,21 @@ void __attribute__((naked,noinline)) sub_F800CCB4_my() {
 "loc_F800CCF4:\n"
       "    B       loc_F800CCF4 \n" 
 "loc_F800CCF8:\n"
-      "    BL      sub_F8648AB4 \n" 
+      "    BL      sub_F864833C \n" 
       "    LDR     R1, =0x5CE000 \n" 
       "    MOV     R0, #0 \n" 
       "    BL      sub_F803979C \n" 
-      "    BL      sub_F8648ABC \n" 
+      "    BL      sub_F8648344 \n" 
       "    MOV     R3, #0 \n" 
       "    STR     R3, [SP] \n" 
-//      "    LDR     R3, =0xF800CC4C \n" 
+      //"    LDR     R3, =0xF800CC4C \n" 
       "    LDR     R3, =task_Startup_my \n" 
       "    MOV     R2, #0 \n" 
       "    MOV     R1, #0x19 \n" 
       "    LDR     R0, =0xF800CD3C \n" 
-      "    BL      sub_F864899C \n" 
+      "    BL      sub_F8648224 \n" 
       "    MOV     R0, #0 \n" 
       "    LDMFD   SP!, {R3,PC} \n" 
-
 	 );
 }
 
@@ -543,7 +542,7 @@ void __attribute__((naked,noinline)) sub_F80211F4_my() {
       //"    BL      sub_F807B174 \n" // Disable StartUpChecks
       "    BL      sub_F807B170 \n" 
       "    MOV     R0, #1 \n" 
-      "    LDMFD   SP!, {R4-R6,PC} \n"
+      "    LDMFD   SP!, {R4-R6,PC} \n" 
 	 );
 }
 
@@ -579,9 +578,9 @@ void __attribute__((naked,noinline)) task_Startup_my() {
       "    BL      sub_F803B674 \n" 
       "    BL      sub_F80396D0 \n" 
       "    BL      sub_F803B990 \n" 
-      "    BL      CreateTask_spytask\n"
+      "    BL      CreateTask_spytask\n" // +++
 //	  "    BL      sub_F8021094 \n"  //"taskCreatePhySw
-      "    BL      taskcreatePhySw_my\n"
+      "    BL      taskcreatePhySw_my\n" // +++
       "    BL      sub_F8036DF8 \n" 
       "    BL      sub_F803B9A8 \n" 
       "    BL      sub_F801DF88 \n" 
@@ -593,7 +592,7 @@ void __attribute__((naked,noinline)) task_Startup_my() {
       "    BL      sub_F801ECA4 \n" 
       "    BL      sub_F801FD04 \n" 
       "    LDMFD   SP!, {R4,LR} \n" 
-      "    B       sub_F8004A90 \n"
+      "    B       sub_F8004A90 \n" 
     );
 }
 
@@ -614,15 +613,15 @@ void __attribute__((naked,noinline)) taskcreatePhySw_my() {
 
       "    MOV     R1, #0x17 \n" 
       "    LDR     R0, =0xF8021344 \n" 
-      "    BL      sub_F8648A8C \n" 
+      "    BL      sub_F8648314 \n" 
       "    STR     R0, [R4, #4] \n" 
 "loc_F80210C8:\n"
-      "    BL      sub_F807C0E4 \n"  // Jogdial task create called from here
+      "    BL      sub_F807C0E4 \n" // jogdial task called from here
       "    BL      sub_F80D501C \n" 
       "    BL      sub_F8023298 \n" 
       "    CMP     R0, #0 \n" 
       "    BNE     loc_F80210E8 \n" 
-      "    LDR     R1, =0x41628 \n" 
+      "    LDR     R1, =0x41608 \n" 
       "    MOV     R0, #0 \n" 
       "    BL      sub_F80D4F88 \n" 
 "loc_F80210E8:\n"
@@ -641,7 +640,7 @@ void __attribute__((naked,noinline)) init_file_modules_task() {
       "    MOVNE   R0, R5 \n" 
       "    BLNE    sub_F80D90A8 \n" 
       "    BL      sub_F80D75B0 \n" 
-      "    BL      core_spytask_can_start\n" //
+      "    BL      core_spytask_can_start\n" // +++
       "    CMP     R4, #0 \n" 
       "    LDMNEFD SP!, {R4-R6,PC} \n" 
       "    MOV     R0, R5 \n" 
@@ -663,7 +662,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    SUB     SP, SP, #0x24 \n" 
       "    BL      sub_F807C150 \n" 
       "    LDR     R12, =0x3014 \n" 
-      "    LDR     R6, =0xF864BD4C \n" 
+      "    LDR     R6, =0xF864B5D4 \n" 
       "    MOV     R0, #0 \n" 
 
 // Save pointer for kbd.c routine
@@ -691,11 +690,11 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    MOV     R2, #0 \n" 
       "    LDR     R0, [R0, #8] \n" 
       "    MOV     R1, SP \n" 
-      "    BL      sub_F8648A5C \n" 
+      "    BL      sub_F86482E4 \n" 
       "    CMP     R0, #0 \n" 
       "    LDRNE   R1, =0x20B \n" 
       "    LDRNE   R0, =0xF807C068 \n" 
-      "    BLNE    sub_F8648994 \n" 
+      "    BLNE    sub_F864821C \n" 
       "    LDR     R0, [SP] \n" 
       "    AND     R4, R0, #0xFF \n" 
       "    AND     R0, R0, #0xFF00 \n" 
@@ -710,7 +709,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    CMP     R4, #0 \n" 
       "    LDRNE   R1, =0x285 \n" 
       "    LDRNE   R0, =0xF807C068 \n" 
-      "    BLNE    sub_F8648994 \n" 
+      "    BLNE    sub_F864821C \n" 
       "    RSB     R0, R4, R4, LSL #3 \n" 
       "    LDR     R0, [R6, R0, LSL #2] \n" 
 "loc_F807BE70:\n"
@@ -836,7 +835,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    LDR     R1, =0x267 \n" 
 "loc_F807C008:\n"
       "    LDR     R0, =0xF807C068 \n" 
-      "    BL      sub_F8648994 \n" 
+      "    BL      sub_F864821C \n" 
 "loc_F807C010:\n"
       "    ADD     R0, R6, R5, LSL #2 \n" 
       "    LDR     R0, [R0, #0x18] \n" 
@@ -857,7 +856,7 @@ void __attribute__((naked,noinline)) JogDial_task_my() {
       "    LDR     R1, =0x26E \n" 
 "loc_F807C054:\n"
       "    LDR     R0, =0xF807C068 \n" 
-      "    BL      sub_F8648994 \n" 
+      "    BL      sub_F864821C \n" 
       "    B       loc_F807BE08 \n" 
 );
 }
