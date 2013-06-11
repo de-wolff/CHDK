@@ -3,8 +3,6 @@
 
 #include "stubs_asm.h"
 
-STUB(6855A4)
-STUB(6858AC)
 STUB(F800038C)
 STUB(F8000AE8)
 STUB(F800116C)

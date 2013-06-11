@@ -29,6 +29,7 @@
     #undef  CAM_DRYOS_2_3_R31                   // Define for cameras with DryOS release R31 or greater -> G10
     #undef  CAM_DRYOS_2_3_R39                   // Define for cameras with DryOS release R39 or greater
     #undef  CAM_DRYOS_2_3_R47                   // Define for cameras with DryOS release R47 or greater -> Cameras can boot from FAT32
+    #undef  CAM_DRYOS_NEW_TASK_HOOK             // Define for cameras using the new task hook (DryOS release R51)
 
     #undef  CAM_HAS_CMOS                        // Camera has CMOS sensor
     #undef  CAM_SWIVEL_SCREEN                   // Camera has rotated LCD screen

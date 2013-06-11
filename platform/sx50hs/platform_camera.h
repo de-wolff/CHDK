@@ -27,6 +27,7 @@
     #define CAM_DRYOS                           1
     #define CAM_DRYOS_2_3_R39                   1
     #define CAM_DRYOS_2_3_R47                   1
+    #define CAM_DRYOS_NEW_TASK_HOOK             1
 
     #undef  CAM_UNCACHED_BIT
     #define CAM_UNCACHED_BIT  0x40000000 // Found @0xff020984

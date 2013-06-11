@@ -8,3 +8,4 @@ NHSTUB(kbd_pwr_on,                  NULL_SUB)
 NHSTUB(SetZoomActuatorSpeedPercent, NULL_SUB)
 
 NHSTUB(MakeDirectory_Fut,           0xF8024794)
+
