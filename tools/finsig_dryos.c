@@ -1280,6 +1280,9 @@ func_entry  func_names[] =
     { "task_RotaryEncoder", OPTIONAL },
     { "task_TouchPanel", OPTIONAL },
 
+    { "hook_CreateTask" },
+    { "hook_CreateTask2" },
+
     { "time" },
     { "vsprintf" },
     { "write", UNUSED },
@@ -1313,6 +1316,8 @@ typedef struct {
 } sig_stuff;
 
 sig_stuff min_ver[] = {
+    { "hook_CreateTask", 51 },
+    { "hook_CreateTask2", 51 },
 	{ "ScreenLock", 39 },
 	{ "ScreenUnlock", 39 },
 	{ "MakeSDCardBootable", 47 },
@@ -1589,6 +1594,7 @@ string_sig string_sigs[] = {
 
     { 5, "UIFS_WriteFirmInfoToFile", "UIFS_WriteFirmInfoToFile", 1 },
     { 5, "CreateTask", "CreateTask", 1 },
+    { 5, "hook_CreateTask", "CreateTask", 1 },
     { 5, "ExitTask", "ExitTask", 1 },
     { 5, "SleepTask", "SleepTask", 1 },
 	//																	 R20   R23   R31   R39   R43   R45   R47   R49   R50   R51   R52
@@ -1670,6 +1676,8 @@ string_sig string_sigs[] = {
     { 16, "DeleteDirectory_Fut", (char*)DeleteDirectory_Fut_test, 0x01000001 },
     { 16, "MakeDirectory_Fut", (char*)MakeDirectory_Fut_test, 0x01000001 },
     { 16, "RenameFile_Fut", (char*)RenameFile_Fut_test, 0x01000001 },
+
+	{ 17, "hook_CreateTask2", "PhySw", 1 },
 	
     { 0, 0, 0, 0 }
 };
@@ -2452,6 +2460,69 @@ int match_strsig16(firmware *fw, string_sig *sig, int k, uint32_t *p, int j)
 	return 0;
 }
 
+// Sig pattern:
+//		Load Func Address	-	LDR	R3, =func	- these four may occur in any order ?
+//		Load String Address	-	ADR	R0, "func"	
+//		Load value			-	MOV R2, x		
+//		Load value			-	MOV R1, y		
+//		Branch				-	BL
+//          \-----> LDR PC, =Z
+//		String				-	DCB	"func"
+//      
+//      Returns the value loaded in the PC by the function called
+//      Currently a special case for hook_CreateTask2 (DryOS >= r51)
+int match_strsig17(firmware *fw, string_sig *sig, int k, uint32_t *p, int j)
+{
+	uint32_t sadr = idx2adr(fw,j);        // string address
+	int j1;
+	for (j1 = j-5; j1 >= 0; j1--)
+	{
+		if ((isADR(fw,j1)   || isLDR(fw,j1))   &&   // LDR, ADR or MOV
+			(isADR(fw,j1+1) || isLDR(fw,j1+1)) &&   // LDR, ADR or MOV
+			(isADR(fw,j1+2) || isLDR(fw,j1+2)) &&   // LDR, ADR or MOV
+			(isADR(fw,j1+3) || isLDR(fw,j1+3)) &&   // LDR, ADR or MOV
+			isBorBL(fw,j1+4))                       // B or BL ?
+		{
+			uint32_t padr;
+			padr = ADR2adr(fw,j1+0);
+			if (padr != sadr) padr = ADR2adr(fw,j1+1);
+			if (padr != sadr) padr = ADR2adr(fw,j1+2);
+			if (padr != sadr) padr = ADR2adr(fw,j1+3);
+            if (padr == sadr)
+			{
+				uint32_t fadr = 0;
+				if      (isLDR_PC(fw,j1)   && (fwRd(fw,j1)   == 3)) fadr = LDR2adr(fw,j1);      // R3 ?
+				else if (isLDR_PC(fw,j1+1) && (fwRd(fw,j1+1) == 3)) fadr = LDR2adr(fw,j1+1);    // R3 ?
+				else if (isLDR_PC(fw,j1+2) && (fwRd(fw,j1+2) == 3)) fadr = LDR2adr(fw,j1+2);    // R3 ?
+				else if (isLDR_PC(fw,j1+3) && (fwRd(fw,j1+3) == 3)) fadr = LDR2adr(fw,j1+3);    // R3 ?
+                if (fadr != 0)
+				{
+					// we have an address for (phySw) task, ignore it
+					fadr = followBranch(fw, idx2adr(fw,j1+4), 0x01000001);
+                    if (fadr != 0)
+                    {
+                        // follow the BL
+                        fadr = followBranch(fw, fadr, 1);
+                        if (fadr != 0)
+                        {
+                            // we found something, check for LDR PC, =value
+                            if (isLDR_PC(fw, adr2idx(fw,fadr)))
+                            {
+                                // extract the value
+                                uint32_t val = LDR2val(fw, adr2idx(fw, fadr));
+                                fwAddMatch(fw,val,32,0,k,117);
+					            return 1;
+                            }
+                        }
+                    }
+                }
+			}
+		}
+	}
+
+	return 0;
+}
+
 int find_strsig(firmware *fw, string_sig *sig, int k)
 {
 	switch (sig->type)
@@ -2472,6 +2543,7 @@ int find_strsig(firmware *fw, string_sig *sig, int k)
     case 14:	return fw_process(fw, sig, k, match_strsig14);
     case 15:	return fw_string_process(fw, sig, k, match_strsig15, 1);
     case 16:	return fw_process(fw, sig, k, match_strsig16);
+    case 17:    return fw_string_process(fw, sig, k, match_strsig17, 1);
 	}
 	
 	return 0;
@@ -2701,7 +2773,8 @@ void print_results(const char *curr_name, int k)
 	out_hdr = err;
 
 	char *macro = "NHSTUB";
-	if (strncmp(curr_name,"task_",5) == 0) macro = "   DEF";
+	if (strncmp(curr_name,"task_",5) == 0 ||
+        strncmp(curr_name,"hook_",5) == 0) macro = "   DEF";
 
 	if (count == 0)
 	{
