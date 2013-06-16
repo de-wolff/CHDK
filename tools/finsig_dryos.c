@@ -772,6 +772,11 @@ int isLDMFD(firmware *fw, int offset)
     return ((fwval(fw,offset) & 0xFFFF0000) == 0xE8BD0000);
 }
 
+int isLDMFD_PC(firmware *fw, int offset)
+{
+    return ((fwval(fw,offset) & 0xFFFF8000) == 0xE8BD8000);
+}
+
 int isLDR(firmware *fw, int offset)
 {
 	return ((fwval(fw,offset) & 0xFE100000) == 0xE4100000);
@@ -840,6 +845,11 @@ int isCMP(firmware *fw, int offset)
 int isMOV(firmware *fw, int offset)
 {
     return ((fwval(fw,offset) & 0xFFF00000) == 0xE1A00000); // MOV
+}
+
+int isMOV_immed(firmware *fw, int offset)
+{
+    return ((fwval(fw,offset) & 0xFFF00000) == 0xE3A00000); // MOV Rd, #
 }
 
 int find_inst(firmware *fw, int (*inst)(firmware*,int), int idx, int len)
@@ -1010,6 +1020,16 @@ void load_firmware(firmware *fw, char *filename, char *base_addr, char *alt_base
 
     if (fw->maxram != 0)
 		bprintf("//   MAXRAMADDR = 0x%08x\n",fw->maxram);
+
+    // Find MEMISOSTART
+    for (k=0; k<100; k++)
+    {
+        if (isLDR_PC(fw,k) && (LDR2val(fw,k) == 0x1900) && isLDR_PC(fw,k+6))
+        {
+            uint32_t memisostart = LDR2val(fw,k+6);
+		    bprintf("//   MEMISOSTART = 0x%08x\n",memisostart);
+        }
+    }
 
     uint32_t ofst = adr2idx(fw,0xFFFF0000);    // Offset of area to find dancing bits
     if (idx_valid(fw,ofst) && isB(fw,ofst) && isLDR_PC(fw,ofst+1))
@@ -1770,6 +1790,17 @@ int find_BL(firmware *fw, int k, uint32_t v1, uint32_t v2)
     if (isBL(fw,k))
     {
         int n = idxFollowBranch(fw, k, 0x01000001);
+        if (n == v1)
+            return k;
+    }
+    return 0;
+}
+
+int find_B(firmware *fw, int k, uint32_t v1, uint32_t v2)
+{
+    if (isB(fw,k))
+    {
+        int n = idxFollowBranch(fw, k, 0x00000001);
         if (n == v1)
             return k;
     }
@@ -3218,6 +3249,7 @@ void find_lib_vals(firmware *fw)
                         if (isSTR(fw,k1) && ((fw->buf[k1] & 0x000F0000) == reg))
                         {
                             uint32_t ofst = fw->buf[k1] & 0x00000FFF;
+                        	bprintf("DEF(%-40s,0x%08x) // Found 0x%04x (@0x%08x) + 0x%02x (@0x%08x)\n","viewport_fb_d",adr+ofst,adr,idx2adr(fw,ka),ofst,idx2adr(fw,k1));
             			    bprintf("//void *vid_get_viewport_fb_d()    { return (void*)(*(int*)(0x%04x+0x%02x)); } // Found @0x%08x & 0x%08x\n",adr,ofst,idx2adr(fw,ka),idx2adr(fw,k1));
                             found = 1;
                             break;
@@ -3236,6 +3268,7 @@ void find_lib_vals(firmware *fw)
 		if (isLDR(fw,k-1) && isBL(fw,k+1))
 		{
 			uint32_t v1 = LDR2val(fw,k-1);
+        	bprintf("DEF(%-40s,0x%08x) // Found @0x%08x\n","jpeg_count_str",v1,idx2adr(fw,k-1));
 			bprintf("//char *camera_jpeg_count_str()    { return (char*)0x%08x; }             // Found @0x%08x\n",v1,idx2adr(fw,k-1));
 		}
 	}
@@ -3483,6 +3516,41 @@ int match_palette_buffer_offset(firmware *fw, int k)
     return 0;
 }
 
+int match_palette_data3(firmware *fw, int k, uint32_t palette_data, uint32_t v2)
+{
+    if (isLDR_PC(fw, k) && (LDR2val(fw,k) == palette_data) && isLDR_PC(fw,k-1) && isLDR_PC(fw,k-6) && isLDR(fw,k-5))
+    {
+        int palette_control = LDR2val(fw,k-6);
+        int ptr_offset = fwOp2(fw,k-5);
+        uint32_t fadr = find_inst_rev(fw, isSTMFD_LR, k-7, 30);
+        if (fadr > 0)
+        {
+            int k1 = search_fw(fw, find_B, fadr, 0, 1);
+            if ((k1 > 0) && isLDR_PC(fw,k1-2) && isLDR(fw,k1-1) && (LDR2val(fw,k1-2) == palette_control))
+            {
+                int active_offset = fwOp2(fw,k1-1);
+                print_stubs_min(fw,"active_palette_buffer",palette_control+active_offset,idx2adr(fw,k1-1));
+                print_stubs_min(fw,"palette_buffer_ptr",palette_control+ptr_offset,idx2adr(fw,k-5));
+                if (isBL(fw,k+8))
+                {
+                    fadr = followBranch(fw, idx2adr(fw,k+8), 0x01000001);
+                    int idx = adr2idx(fw, fadr);
+                    if (isLDR(fw, idx+2) && isBL(fw, idx+3))
+                    {
+                        uint32_t palette_size = LDR2val(fw,idx+2);
+                        if (palette_size >= 0x400)
+                        {
+                            bprintf("// Offset from start of palette_buffer to color data = %d (Found @0x%08x)\n",palette_size-0x400,idx2adr(fw,idx+2));
+                        }
+                    }
+                }
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 int match_palette_data2(firmware *fw, int k, uint32_t v1, uint32_t v2)
 {
     if (isLDR(fw,k) && (LDR2val(fw,k) == v1))
@@ -3597,6 +3665,7 @@ int match_SavePaletteData(firmware *fw, int idx, int palette_data)
                 search_fw(fw, match_palette_data2, palette_data, palette_control, 1);
             }
         }
+        return 1;
     }
 
     return 0;
@@ -3822,6 +3891,35 @@ int match_bitmap_buffer(firmware *fw, int k, int v)
     return 0;
 }
 
+int match_raw_buffer(firmware *fw, int k, uint32_t rb1, uint32_t v2)
+{
+    if ((fwval(fw,k) == rb1) && (fwval(fw,k+4) == rb1) && (fwval(fw,k-2) != 1))
+    {
+        uint32_t rb2 = fwval(fw,k+1);
+        if ((rb1 != rb2) && (rb2 > 0))
+        {
+            bprintf("// Camera has 2 RAW buffers @ 0x%08x & 0x%08x\n", rb1, rb2, idx2adr(fw,k));
+            bprintf("//  Note: active buffer --> raw_buffers[active_raw_buffer]\n");
+            bprintf("//        other buffer  --> raw_buffers[active_raw_buffer^1]\n");
+            print_stubs_min(fw,"raw_buffers",idx2adr(fw,k),idx2adr(fw,k));
+        }
+        return rb2;
+    }
+    else if ((fwval(fw,k) == rb1) && (fwval(fw,k-2) == 2) && (fwval(fw,k-7) == rb1))
+    {
+        uint32_t rb2 = fwval(fw,k+3);
+        if ((rb1 != rb2) && (rb2 > 0))
+        {
+            bprintf("// Camera has 2 RAW buffers @ 0x%08x & 0x%08x\n", rb1, rb2, idx2adr(fw,k));
+            bprintf("//  Note: active buffer --> raw_buffers[ active_raw_buffer   *3]\n");
+            bprintf("//        other buffer  --> raw_buffers[(active_raw_buffer^1)*3]\n");
+            print_stubs_min(fw,"raw_buffers",idx2adr(fw,k),idx2adr(fw,k));
+        }
+        return rb2;
+    }
+    return 0;
+}
+
 // Search for things that go in 'stubs_min.S'
 void find_stubs_min(firmware *fw)
 {
@@ -4034,7 +4132,10 @@ void find_stubs_min(firmware *fw)
     if (palette_data)
     {
         bprintf("// Palette colour tables  found @ 0x%08x\n", palette_data);
-        search_saved_sig(fw, "SavePaletteData", match_SavePaletteData, palette_data, 0, 1);
+        if (search_saved_sig(fw, "SavePaletteData", match_SavePaletteData, palette_data, 0, 1) == 0)
+        {
+            search_fw(fw, match_palette_data3, palette_data, 0, 1);
+        }
 	}
     
 	// Find 'bitmap buffer' info
@@ -4046,6 +4147,99 @@ void find_stubs_min(firmware *fw)
 	{
         search_fw(fw, match_viewport_address, v, 0, 1);
     }
+	
+	// find 1st RAW buffer address
+	k = find_str_ref(fw, "CRAW BUFF       %p");
+	if (k >= 0)
+	{
+        uint32_t rb1 =0, rb2 = 0;
+		if (isLDR(fw,k-1))
+		{
+			rb1 = LDR2val(fw,k-1);
+        }
+        else if (isMOV_immed(fw,k-1))
+        {
+			rb1 = ALUop2(fw,k-1);
+        }
+        else if (isMOV(fw,k-1) && (fwRd(fw,k-1) == 1))
+        {
+            int reg = fwval(fw,k-1) & 0xF;
+            for (k1=k-2; k1>k-50; k1--)
+            {
+                if (isLDR(fw,k1) && (fwRd(fw,k1) == reg))
+                {
+                    rb1 = LDR2val(fw,k1);
+                    break;
+                }
+            }
+        }
+        if (rb1 > 0)
+        {
+            rb2 = search_fw(fw, match_raw_buffer, rb1, 0, 5);
+            if ((rb2 > 0) && (rb1 != rb2))
+            {
+                // Find 'active_raw_buffer'
+	            sadr = find_str(fw, "SsImgProcBuf.c");
+	            k = find_nxt_str_ref(fw, sadr, -1);
+                found = 0;
+	            while ((k >= 0) && !found)
+	            {
+                    int f = find_inst_rev(fw, isSTMFD_LR, k-1, 100);
+                    if (f != -1)
+                    {
+                        int e = find_inst(fw, isLDMFD_PC, f+1, 200);
+                        for (k1 = f+1; k1 < e; k1++)
+                        {
+                            if (
+                                (
+                                    ((fwval(fw,k1)   & 0xFFF00FFF) == 0xE2400001) &&    // SUB Rx, Rn, #1
+                                    isLDR(fw,k1+1) &&                                   // LDR Ry, [Rz,
+                                    ((fwval(fw,k1+2) & 0xFFF00000) == 0xE1500000) &&    // CMP Rx, Ry
+                                    (((fwRd(fw,k1) == fwRd(fw,k1+2)) && (fwRd(fw,k1+1) == fwRn(fw,k1+2))) ||
+                                     ((fwRd(fw,k1) == fwRn(fw,k1+2)) && (fwRd(fw,k1+1) == fwRd(fw,k1+2)))) &&
+                                    ((fwval(fw,k1+3) & 0xFFF00FFF) == 0x12800001) &&    // ADDNE Ry, Ry, #1
+                                    ((fwRd(fw,k1+3) == fwRn(fw,k1+3)) && (fwRd(fw,k1+3) == fwRd(fw,k1+1))) &&
+                                    ((fwval(fw,k1+4) & 0xFFF00FFF) == 0x03A00000) &&    // MOVEQ Ry, #0
+                                    (fwRd(fw,k1+4) == fwRd(fw,k1+1)) &&
+                                    isSTR(fw,k1+5) &&                                   // STR Ry, [Rz,
+                                    ((fwRd(fw,k1+5) == fwRd(fw,k1+1)) && (fwRn(fw,k1+5) == fwRn(fw,k1+1)) && (fwOp2(fw,k1+5) == fwOp2(fw,k1+1)))
+                                ) ||
+                                (
+                                    ((fwval(fw,k1)   & 0xFFF00FFF) == 0xE2400001) &&    // SUB Rx, Rn, #1
+                                    isLDR(fw,k1+1) &&                                   // LDR Ry, [Rz,
+                                    ((fwval(fw,k1+3) & 0xFFF00000) == 0xE1500000) &&    // CMP Rx, Ry
+                                    (((fwRd(fw,k1) == fwRd(fw,k1+3)) && (fwRd(fw,k1+1) == fwRn(fw,k1+3))) ||
+                                     ((fwRd(fw,k1) == fwRn(fw,k1+3)) && (fwRd(fw,k1+1) == fwRd(fw,k1+3)))) &&
+                                    ((fwval(fw,k1+4) & 0xFFF00FFF) == 0x12800001) &&    // ADDNE Ry, Ry, #1
+                                    ((fwRd(fw,k1+4) == fwRn(fw,k1+4)) && (fwRd(fw,k1+4) == fwRd(fw,k1+1))) &&
+                                    ((fwval(fw,k1+5) & 0xFFF00FFF) == 0x03A00000) &&    // MOVEQ Ry, #0
+                                    (fwRd(fw,k1+5) == fwRd(fw,k1+1)) &&
+                                    isSTR(fw,k1+7) &&                                   // STR Ry, [Rz,
+                                    ((fwRd(fw,k1+7) == fwRd(fw,k1+1)) && (fwRn(fw,k1+7) == fwRn(fw,k1+1)) && (fwOp2(fw,k1+7) == fwOp2(fw,k1+1)))
+                                )
+                               )
+                            {
+                                int ofst = fwOp2(fw,k1+1);
+                                int reg = fwRn(fw,k1+1);
+                                int k2;
+                                for (k2 = f+1; k2 < e; k2++)
+                                {
+                                    if (isLDR_PC(fw,k2) && (fwRd(fw,k2) == reg))
+                                    {
+                                        uint32_t base = LDR2val(fw,k2);
+                                        print_stubs_min(fw,"active_raw_buffer",base+ofst,idx2adr(fw,k1));
+                                        found = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    k = find_nxt_str_ref(fw, sadr, k);
+	            }
+            }
+		}
+	}
 }
 
 //------------------------------------------------------------------------------------------------------------
