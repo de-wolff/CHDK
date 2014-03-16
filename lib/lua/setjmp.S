@@ -120,8 +120,12 @@ SYM (\name):
 	FUNC_START setjmp
 
 	/* Save all the callee-preserved registers into the jump buffer.  */
+#ifdef __thumb2__
+	stmea		a1!, { v1-v7, fp, ip, lr }
+#else
 	stmea		a1!, { v1-v7, fp, ip, sp, lr }
-	
+#endif
+
 #if 0	/* Simulator does not cope with FP instructions yet.  */
 #ifndef __SOFTFP__
 	/* Save the floating point registers.  */
@@ -142,7 +146,11 @@ SYM (\name):
 	/* If we have stack extension code it ought to be handled here.  */
 	
 	/* Restore the registers, retrieving the state when setjmp() was called.  */
+#ifdef __thumb2__
+	ldmfd		a1!, { v1-v7, fp, ip, lr }
+#else
 	ldmfd		a1!, { v1-v7, fp, ip, sp, lr }
+#endif
 	
 #if 0	/* Simulator does not cope with FP instructions yet.  */
 #ifndef __SOFTFP__

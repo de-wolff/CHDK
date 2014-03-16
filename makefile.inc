@@ -140,19 +140,21 @@ GCC_VERSION_MAJOR=$(firstword $(subst ., ,$(GCC_VERSION)))
 # -fno-schedule-insns2 for this gcc bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=38644
 # technically not required for gcc >= 4.6.3, and probably not required for vxworks cams
 # see http://chdk.setepontos.com/index.php?topic=8273.msg100205#msg100205
-CFLAGS=-fno-inline -Os -fno-strict-aliasing -fno-schedule-insns2
+#CFLAGS=-fno-inline -Os -fno-strict-aliasing -fno-schedule-insns2
+CFLAGS=-fno-inline -Os -fno-strict-aliasing
 # flags for gcc v4
 # CFLAGS+=-mcpu=arm946e-s
 # for gcc v3, we use to allow use of strd etc
-ifeq ($(GCC_VERSION_MAJOR),3)
-    CFLAGS+=-march=armv5te
-else
-    ifeq ($(GCC_VERSION_MAJOR),4)
-        # TODO should be -mcpu, but breaks things ATM
-        CFLAGS+=-mtune=arm946e-s
-    endif
-endif
+#ifeq ($(GCC_VERSION_MAJOR),3)
+#    CFLAGS+=-march=armv5te
+#else
+#    ifeq ($(GCC_VERSION_MAJOR),4)
+#        # TODO should be -mcpu, but breaks things ATM
+#        CFLAGS+=-mtune=arm946e-s
+#    endif
+#endif
 
+CFLAGS+=-march=armv7-a
 
 CTHUMB=-mthumb
 ifndef SKIPINTERWORK
@@ -259,7 +261,7 @@ ifndef SKIPBUILDRULES
 # rule for building .o from .c in the same directory
 %.o: %.c
 	@echo $< \-\> $@
-	$(CC) $(CFLAGS) -nostdinc -c -o $@ $<
+	$(CC) $(CFLAGS) $(CTHUMB) -nostdinc -c -o $@ $<
 
 # rule for building .o from .c in the same directory - forces THUMB build
 %.thm.o: %.c
@@ -269,7 +271,7 @@ ifndef SKIPBUILDRULES
 # rule for building .o from .c in the 'core' directory
 %.o: $(topdir)core/%.c
 	@echo $< \-\> $@
-	$(CC) $(CFLAGS) -nostdinc -c -o $@ $<
+	$(CC) $(CFLAGS) $(CTHUMB) -nostdinc -c -o $@ $<
 
 # rule for building .o from .c in the 'core' directory - forces THUMB build
 %.thm.o: $(topdir)core/%.c
@@ -279,12 +281,12 @@ ifndef SKIPBUILDRULES
 # rule for building .o from .c in the 'modules' directory
 %.o: $(topdir)modules/%.c
 	@echo $< \-\> $@
-	$(CC) $(CFLAGS) -nostdinc -c -o $@ $<
+	$(CC) $(CFLAGS) $(CTHUMB) -nostdinc -c -o $@ $<
 	
 # rule for building .o from .S in the same directory
 %.o: %.S
 	@echo $< \-\> $@
-	$(CC) $(CFLAGS) -nostdinc -c -o $@ $<
+	$(CC) $(CFLAGS) $(CTHUMB) -nostdinc -c -o $@ $<
 	
 # rule for building .a
 %.a:

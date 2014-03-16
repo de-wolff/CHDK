@@ -1,6 +1,6 @@
 #!build time optional components - comment out the features you dont want to have in your build or copy this file to localbuildconf.inc and override settings there
-OPT_CURVES=1
-OPT_DEBUGGING=1
+OPT_CURVES=0
+OPT_DEBUGGING=0
 
 # Force config option on to allow Lua to call arbitrary ROM functions and eventprocs
 # By default this is a user controlled setting in the CHDK UI.
@@ -19,7 +19,7 @@ OPT_DEBUGGING=1
 #OPT_EXMEM_TESTING=1
 
 # experimental PTP/USB interface
-OPT_PTP=1
+OPT_PTP=0
 
 # record asserts in lua C code with dbg_dump_assert
 #OPT_DBG_LUA_ASSERT=1
@@ -34,9 +34,9 @@ OPT_PTP=1
 #OPT_WARNINGS=1
 
 # If enabled (and reference binaries are present in /tools), compiler will generate function signatures
-OPT_GEN_SIGS=1
+OPT_GEN_SIGS=0
 # If enabled (and firmware binaries are present) compiler will update "stubs_entry.S"
-OPT_GEN_STUBS=1
+OPT_GEN_STUBS=0
 
 # for CHDK-DE presets without OPT_DEFAULT_LANG
 #OPT_DE_VERSION=1
