@@ -1,5 +1,16 @@
 # ARM GCC rules
 
+#check which compiler to use
+ifndef OPT_USE_GCC_EABI  #if user has not defined use EABI GCC 
+    USE_ELF = $(shell if [ -z $$(which arm-elf-gcc) ]; then echo "FALSE"; else echo "TRUE"; fi)
+    USE_EABI = $(shell if [ -z $$(which arm-none-eabi-gcc) ]; then echo "FALSE"; else echo "TRUE"; fi)
+    ifeq ($(USE_ELF), FALSE) #if not installed arm-elf-gcc
+        ifeq ($(USE_EABI), TRUE) #if installed arm-none-eabi-gcc
+            OPT_USE_GCC_EABI := 1 # use EABI GCC
+        endif
+    endif
+endif
+
 ifdef OPT_USE_GCC_EABI
     CROSS_COMPILE=arm-none-eabi-
     ifndef THUMB_FW
